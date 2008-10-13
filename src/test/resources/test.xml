@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<test xmlns="test.xml" xmlns:tst="http://www.test.com">
+  <child name="name1">text1</child>
+  <tst:child2 name="name1">text1</tst:child2>
+  <tst:child xmlns:tst="http://www.test2.com" name="name1">text1</tst:child>
+  <tst:child name="name1" tst:name="prefixed">
+    <cdata xmlns="other.xml">normal text <![CDATA[cdata <element> & attribute]]></cdata>
+  </tst:child>
+  <tst:child name="mixed">this is an element with <b>bold</b> and <i>italic</i> mixed content.</tst:child>
+  <tst:child name="comment"><!--This is a multiline Comment --></tst:child>
+  <tst:child name="mixed+comment">this is an element with <b>bold</b> and <i>italic</i> <!--This is a multiline Comment --> mixed content.</tst:child>
+  <parent name="name1"><child>text</child><!-- comment --></parent>
+</test>
