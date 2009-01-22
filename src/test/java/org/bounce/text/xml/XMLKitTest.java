@@ -34,15 +34,11 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.FileReader;
 
 import javax.swing.JButton;
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
-import javax.swing.UIManager;
-import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.text.PlainDocument;
 
 import org.bounce.text.LineNumberMargin;
@@ -61,25 +57,19 @@ public class XMLKitTest {
      * @param args
      */
     public static void main( String[] args) {
-        if ( args.length != 1) {
-            System.err.println( "need filename argument");
-            System.exit( 1);
-        }
-
         try {
             editor = new JEditorPane();
             
             // Instantiate a XMLEditorKit with wrapping enabled.
-            XMLEditorKit kit = new XMLEditorKit( true);
+            XMLEditorKit kit = new XMLEditorKit(true);
 
             // Set the wrapping style.
-            kit.setWrapStyleWord( true);
+            kit.setWrapStyleWord(true);
             kit.setFolding(true);
             
-            editor.setEditorKit( kit);
+            editor.setEditorKit(kit);
 
-            File file = new File(args[0]);
-            editor.read(new FileReader(file), file);
+            editor.read(XMLKitTest.class.getResourceAsStream("/test.xml"), null);
 
             // Set the font style.
             editor.setFont(new Font("Courier", Font.PLAIN, 12));

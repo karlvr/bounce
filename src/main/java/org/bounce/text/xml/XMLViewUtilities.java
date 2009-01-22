@@ -1,5 +1,5 @@
 /*
- * $Id: XMLViewUtilities.java,v 1.4 2008/04/16 19:36:18 edankert Exp $
+ * $Id: XMLViewUtilities.java,v 1.5 2009/01/22 22:14:59 edankert Exp $
  *
  * Copyright (c) 2002 - 2008, Edwin Dankert, Evgeniy Smelik 
  * All rights reserved.
@@ -46,7 +46,7 @@ import java.util.regex.Pattern;
  * </p>
  *
  * @author Edwin Dankert <edankert@gmail.com>, Evgeniy Smelik <sever@yandex.ru>
- * @version $Revision: 1.4 $, $Date: 2008/04/16 19:36:18 $
+ * @version $Revision: 1.5 $, $Date: 2009/01/22 22:14:59 $
  */
 class XMLViewUtilities {
     private static Segment lineBuffer = null;
@@ -400,7 +400,7 @@ class XMLViewUtilities {
     private static void updateScanner(XMLScanner scanner, Document doc, int p) {
         try {
             if (!scanner.isValid()) {
-                scanner.setRange(getTagEnd(doc, p), doc.getLength());
+                scanner.setRange(getTagEnd(doc, p), doc.getLength()+1);
                 scanner.setValid(true);
             }
 
@@ -423,10 +423,14 @@ class XMLViewUtilities {
                 int index;
 
                 String s = doc.getText(0, p);
+                int cdataStart = s.lastIndexOf("<![CDATA[");
+                int cdataEnd = s.lastIndexOf("]]>");
                 int commentStart = s.lastIndexOf("<!--");
                 int commentEnd = s.lastIndexOf("-->");
 
-                if (commentStart > 0 && commentStart > commentEnd) {
+                if (cdataStart > 0 && cdataStart > cdataEnd) {
+                    index = s.lastIndexOf(">", cdataStart);
+                } else if (commentStart > 0 && commentStart > commentEnd) {
                     index = s.lastIndexOf(">", commentStart);
                 } else {
                     index = s.lastIndexOf(">");

@@ -1,5 +1,5 @@
 /*
- * $Id: XMLStyleConstants.java,v 1.2 2008/01/28 21:02:14 edankert Exp $
+ * $Id: XMLStyleConstants.java,v 1.3 2009/01/22 22:14:59 edankert Exp $
  *
  * Copyright (c) 2002 - 2008, Edwin Dankert
  * All rights reserved.
@@ -39,7 +39,7 @@ package org.bounce.text.xml;
  * http://java.sun.com/products/jfc/tsc/articles/text/editor_kit/
  * </p>
  * 
- * @version $Revision: 1.2 $, $Date: 2008/01/28 21:02:14 $
+ * @version $Revision: 1.3 $, $Date: 2009/01/22 22:14:59 $
  * @author Edwin Dankert <edankert@gmail.com>
  */
 public interface XMLStyleConstants {
@@ -68,6 +68,8 @@ public interface XMLStyleConstants {
     public static final String ENTITY           = "Entity";
     /** The style constant for comment */
     public static final String COMMENT          = "Comment";
+    /** The style constant for cdata */
+    public static final String CDATA          	= "CDATA";
     /** The style constant for declaration */
     public static final String DECLARATION      = "Declaration";
 

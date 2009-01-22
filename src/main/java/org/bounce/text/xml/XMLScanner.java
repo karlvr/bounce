@@ -1,5 +1,5 @@
 /*
- * $Id: XMLScanner.java,v 1.4 2008/01/28 21:02:14 edankert Exp $
+ * $Id: XMLScanner.java,v 1.5 2009/01/22 22:14:59 edankert Exp $
  *
  * Copyright (c) 2002 - 2008, Edwin Dankert
  * All rights reserved.
@@ -41,7 +41,7 @@ import javax.swing.text.Document;
  * http://java.sun.com/products/jfc/tsc/articles/text/editor_kit/
  * </p>
  * 
- * @version $Revision: 1.4 $, $Date: 2008/01/28 21:02:14 $
+ * @version $Revision: 1.5 $, $Date: 2009/01/22 22:14:59 $
  * @author Edwin Dankert <edankert@gmail.com>
  */
 public class XMLScanner {
@@ -53,6 +53,7 @@ public class XMLScanner {
     private final ElementNameScanner ELEMENT_NAME_SCANNER = new ElementNameScanner();
     private final EntityTagScanner ENTITY_TAG_SCANNER = new EntityTagScanner();
     private final CommentScanner COMMENT_SCANNER = new CommentScanner();
+    private final CDATAScanner CDATA_SCANNER = new CDATAScanner();
     private final TagScanner TAG_SCANNER = new TagScanner();
 
     private int start = 0;
@@ -258,9 +259,33 @@ public class XMLScanner {
                 if ( character == 45) { // '-'
                     character = in.read();
                     if ( character == 45) { // '-'
+                        character = in.read();
                         scanner = COMMENT_SCANNER;
                     }
 
+                }
+
+                if ( character == 91) { // '['
+                    character = in.read();
+                    if ( character == 67) { // 'C'
+                        character = in.read();
+                        if ( character == 68) { // 'D'
+                            character = in.read();
+                            if ( character == 65) { // 'A'
+                                character = in.read();
+                                if ( character == 84) { // 'T'
+                                    character = in.read();
+                                    if ( character == 65) { // 'A'
+                                        character = in.read();
+                                        if ( character == 91) { // '['
+                                            character = in.read();
+                                        	scanner = CDATA_SCANNER;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
 
                 if ( scanner == null) {
@@ -345,7 +370,7 @@ public class XMLScanner {
     }
 
     /**
-     * Scans a comment entity ' <!--'.
+     * Scans a comment section ' <!--'.
      */
     private class CommentScanner extends Scanner {
         /**
@@ -369,6 +394,51 @@ public class XMLScanner {
                         if ( character == 62) { // '>'
                             finished();
                             return XMLStyleConstants.COMMENT;
+                        }
+                    }
+                    break;
+
+                default:
+                    character = in.read();
+                    break;
+
+                }
+            }
+        }
+
+        /**
+         * @see Scanner#reset()
+         */
+        public void reset() {
+            super.reset();
+        }
+    }
+
+    /**
+     * Scans a CDATA section ' <![CDATA['.
+     */
+    private class CDATAScanner extends Scanner {
+        /**
+         * @see Scanner#scan(XMLInputReader)
+         */
+        public String scan(XMLInputReader in) throws IOException {
+            int character = in.read();
+
+            while ( true) {
+                // System.out.print((char)character);
+
+                switch ( character) {
+                case -1: // EOF
+                    finished();
+                    return XMLStyleConstants.CDATA;
+
+                case 93: // ']'
+                    character = in.read();
+                    if ( character == 93) { // ']'
+                        character = in.read();
+                        if ( character == 62) { // '>'
+                            finished();
+                            return XMLStyleConstants.CDATA;
                         }
                     }
                     break;

@@ -1,5 +1,5 @@
 /*
- * $Id: XMLContext.java,v 1.3 2008/01/28 21:02:14 edankert Exp $
+ * $Id: XMLContext.java,v 1.4 2009/01/22 22:14:59 edankert Exp $
  *
  * Copyright (c) 2002 - 2008, Edwin Dankert
  * All rights reserved.
@@ -45,7 +45,7 @@ import javax.swing.text.StyleContext;
  * http://java.sun.com/products/jfc/tsc/articles/text/editor_kit/
  * </p>
  * 
- * @version $Revision: 1.3 $, $Date: 2008/01/28 21:02:14 $
+ * @version $Revision: 1.4 $, $Date: 2009/01/22 22:14:59 $
  * @author Edwin Dankert <edankert@gmail.com>
  */
 public class XMLContext extends StyleContext {
@@ -80,6 +80,7 @@ public class XMLContext extends StyleContext {
         setStyle( XMLStyleConstants.NAMESPACE_PREFIX, new Color( 0, 102, 102), Font.PLAIN);
 
         setStyle( XMLStyleConstants.ENTITY, new Color( 102, 102, 102), Font.PLAIN);
+        setStyle( XMLStyleConstants.CDATA, new Color( 0, 153, 153), Font.PLAIN);
         setStyle( XMLStyleConstants.COMMENT, new Color( 153, 153, 153), Font.PLAIN);
         setStyle( XMLStyleConstants.SPECIAL, new Color( 102, 102, 102), Font.PLAIN);
     }
