@@ -261,6 +261,8 @@ public class XMLScanner {
                     if ( character == 45) { // '-'
                         character = in.read();
                         scanner = COMMENT_SCANNER;
+                        scanner.reset();
+                        return XMLStyleConstants.COMMENT;
                     }
 
                 }
@@ -280,6 +282,8 @@ public class XMLScanner {
                                         if ( character == 91) { // '['
                                             character = in.read();
                                         	scanner = CDATA_SCANNER;
+                                            scanner.reset();
+                                            return XMLStyleConstants.CDATA;
                                         }
                                     }
                                 }
@@ -392,8 +396,10 @@ public class XMLScanner {
                     if ( character == 45) { // '-'
                         character = in.read();
                         if ( character == 62) { // '>'
-                            finished();
-                            return XMLStyleConstants.COMMENT;
+                           character = in.read();
+                           finished();
+                           tagScanner.finished();
+                           return XMLStyleConstants.COMMENT;
                         }
                     }
                     break;
@@ -424,20 +430,22 @@ public class XMLScanner {
         public String scan(XMLInputReader in) throws IOException {
             int character = in.read();
 
-            while ( true) {
+            while (true) {
                 // System.out.print((char)character);
 
-                switch ( character) {
+                switch (character) {
                 case -1: // EOF
                     finished();
                     return XMLStyleConstants.CDATA;
 
                 case 93: // ']'
                     character = in.read();
-                    if ( character == 93) { // ']'
+                    if (character == 93) { // ']'
                         character = in.read();
                         if ( character == 62) { // '>'
+                            character = in.read();
                             finished();
+                            tagScanner.finished();
                             return XMLStyleConstants.CDATA;
                         }
                     }

@@ -124,7 +124,42 @@ class XMLInputStream extends InputStream {
         return segment.array[index++];
     }
 
-    // Loads the segment with new information if necessary...
+    public int read(char[] chars) throws IOException {
+    	return read(chars, 0, chars.length);
+    }
+
+public int read(char[] chars, int i, int j) throws IOException {
+    if(chars == null)
+        throw new NullPointerException();
+    if(i < 0 || j < 0 || j > chars.length - i)
+        throw new IndexOutOfBoundsException();
+    if(j == 0)
+        return 0;
+    int k = read();
+    if(k == -1)
+        return -1;
+    chars[i] = (char)k;
+    int i1 = 1;
+    do
+    {
+        try
+        {
+            if(i1 >= j)
+                break;
+            int l = read();
+            if(l == -1)
+                break;
+            chars[i + i1] = (char)l;
+            i1++;
+            continue;
+        }
+        catch(IOException ioexception) { }
+        break;
+    } while(true);
+    return i1;
+}
+
+// Loads the segment with new information if necessary...
     private void loadSegment() throws IOException {
         try {
             int n = Math.min( 1024, end - pos);

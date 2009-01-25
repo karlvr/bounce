@@ -67,21 +67,21 @@ public class XMLContext extends StyleContext {
 
     // Set the default styles.
     private void setDefaultStyles() {
-        setStyle( XMLStyleConstants.ELEMENT_NAME, new Color( 0, 51, 102), Font.PLAIN);
+        setStyle( XMLStyleConstants.ELEMENT_NAME, new Color(136, 18, 128), Font.PLAIN);
         setStyle( XMLStyleConstants.ELEMENT_VALUE, Color.black, Font.PLAIN);
-        setStyle( XMLStyleConstants.ELEMENT_PREFIX, new Color( 0, 102, 102), Font.PLAIN);
+        setStyle( XMLStyleConstants.ELEMENT_PREFIX, new Color(136, 18, 128), Font.PLAIN);
 
-        setStyle( XMLStyleConstants.ATTRIBUTE_NAME, new Color( 153, 51, 51), Font.PLAIN);
-        setStyle( XMLStyleConstants.ATTRIBUTE_VALUE, new Color( 102, 0, 0), Font.PLAIN);
-        setStyle( XMLStyleConstants.ATTRIBUTE_PREFIX, new Color( 0, 102, 102), Font.PLAIN);
+        setStyle( XMLStyleConstants.ATTRIBUTE_NAME, new Color(153, 69, 0), Font.PLAIN);
+        setStyle( XMLStyleConstants.ATTRIBUTE_VALUE, new Color(26, 26, 166), Font.PLAIN);
+        setStyle( XMLStyleConstants.ATTRIBUTE_PREFIX, new Color(153, 69, 0), Font.PLAIN);
 
-        setStyle( XMLStyleConstants.NAMESPACE_NAME, new Color( 102, 102, 102), Font.PLAIN);
-        setStyle( XMLStyleConstants.NAMESPACE_VALUE, new Color( 0, 51, 51), Font.PLAIN);
-        setStyle( XMLStyleConstants.NAMESPACE_PREFIX, new Color( 0, 102, 102), Font.PLAIN);
+        setStyle( XMLStyleConstants.NAMESPACE_NAME, new Color(128, 128, 0), Font.PLAIN);
+        setStyle( XMLStyleConstants.NAMESPACE_VALUE, new Color(63, 95, 191), Font.PLAIN);
+        setStyle( XMLStyleConstants.NAMESPACE_PREFIX, new Color(128, 128, 0), Font.PLAIN);
 
         setStyle( XMLStyleConstants.ENTITY, new Color( 102, 102, 102), Font.PLAIN);
-        setStyle( XMLStyleConstants.CDATA, new Color( 0, 153, 153), Font.PLAIN);
-        setStyle( XMLStyleConstants.COMMENT, new Color( 153, 153, 153), Font.PLAIN);
+        setStyle( XMLStyleConstants.CDATA, new Color(127, 159, 191), Font.PLAIN);
+        setStyle( XMLStyleConstants.COMMENT, new Color(63, 127, 95), Font.PLAIN);
         setStyle( XMLStyleConstants.SPECIAL, new Color( 102, 102, 102), Font.PLAIN);
     }
 

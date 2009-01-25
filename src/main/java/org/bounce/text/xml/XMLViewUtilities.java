@@ -400,7 +400,7 @@ class XMLViewUtilities {
     private static void updateScanner(XMLScanner scanner, Document doc, int p) {
         try {
             if (!scanner.isValid()) {
-                scanner.setRange(getTagEnd(doc, p), doc.getLength()+1);
+                scanner.setRange(getTagEnd(doc, p), doc.getLength());
                 scanner.setValid(true);
             }
 

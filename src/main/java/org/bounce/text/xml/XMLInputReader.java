@@ -28,9 +28,8 @@
  */
 package org.bounce.text.xml;
 
-import java.io.FilterReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 
 /**
@@ -46,7 +45,7 @@ import java.io.UnsupportedEncodingException;
  * @version $Revision: 1.4 $, $Date: 2008/01/28 21:02:14 $
  * @author Edwin Dankert <edankert@gmail.com>
  */
-public class XMLInputReader extends FilterReader {
+public class XMLInputReader extends Reader {
 
     private static final int BUFFERLEN = 10240;
 
@@ -62,16 +61,17 @@ public class XMLInputReader extends FilterReader {
     private int currentIndex = 0;
     private int numChars = 0;
 
+    // test this
+    
     /**
      * Constructs the new input stream reader out of the Xml input strem.
      * 
      * @param inputstream the XML input stream.
+     * @throws UnsupportedEncodingException 
      * 
      * @throws UnsupportedEncodingException
      */
     public XMLInputReader( XMLInputStream inputstream) {
-        super(new InputStreamReader(inputstream));
-
         stream = inputstream;
     }
 
@@ -126,7 +126,7 @@ public class XMLInputReader extends FilterReader {
 
             if ( i == -1) {
                 if ( currentIndex >= numChars) {
-                    numChars = in.read( buffer);
+                    numChars = stream.read( buffer);
 
                     if ( numChars == -1) {
                         i = -1;
@@ -161,7 +161,7 @@ public class XMLInputReader extends FilterReader {
     // Returns the next character from the stream
     private int getNextChar() throws IOException {
         if ( currentIndex >= numChars) {
-            numChars = in.read( buffer);
+            numChars = stream.read( buffer);
 
             if ( numChars == -1) {
                 return -1;
@@ -172,4 +172,15 @@ public class XMLInputReader extends FilterReader {
 
         return buffer[currentIndex++];
     }
+
+	@Override
+	public void close() throws IOException {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public int read(char[] ac, int i, int j) throws IOException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }
