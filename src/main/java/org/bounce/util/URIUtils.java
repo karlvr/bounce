@@ -188,6 +188,32 @@ public class URIUtils {
 	}
 
     /**
+     * Returns the extension of the file that is pointed to by this URI.
+
+     * @param uri the uri to get the extension for.
+     * 
+     * @return the extension of the file.
+     */
+	public static String getExtension(URI uri) {
+        if ( uri != null) {
+    		String location = uri.getSchemeSpecificPart();
+    		
+    		if ( location != null) {
+    			String name = location;
+    			int index = location.lastIndexOf( '.');
+    			
+    			if ( index != -1) {
+    				name = name.substring( index + 1, name.length());
+    			}
+    			
+    			return name;
+    		}
+        }
+    		
+    	return "";
+	}
+
+	/**
      * Returns the name of the directory that is pointed to by this URI.
 
      * @param uri the uri to get the directory name for.
