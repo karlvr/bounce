@@ -1,7 +1,7 @@
 /*
  * $Id: XMLEditorKit.java,v 1.5 2008/01/28 21:02:14 edankert Exp $
  *
- * Copyright (c) 2002 - 2008, Edwin Dankert, Evgeniy Smelik
+ * Copyright (c) 2002 - 2009, Edwin Dankert
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without 
@@ -28,16 +28,22 @@
  */
 package org.bounce.text.xml;
 
-import javax.swing.*;
-import javax.swing.text.*;
-import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.Reader;
-import java.util.Map;
-import java.util.TreeMap;
+
+import javax.swing.JEditorPane;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultEditorKit;
+import javax.swing.text.Document;
+import javax.swing.text.Element;
+import javax.swing.text.Style;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyleContext;
+import javax.swing.text.View;
+import javax.swing.text.ViewFactory;
 
 /**
  * The XML editor kit supports handling of editing XML content. It supports
@@ -48,6 +54,7 @@ import java.util.TreeMap;
  * Prinzing </b>. See:
  * http://java.sun.com/products/jfc/tsc/articles/text/editor_kit/
  * </p>
+ * 
  * <pre><code>
  * JEditorPane editor = new JEditorPane(); 
  * 
@@ -55,21 +62,17 @@ import java.util.TreeMap;
  * XMLEditorKit kit = new XMLEditorKit( true); 
  * 
  * // Set the wrapping style.
- * kit.setWrapStyleWord( true);
+ * kit.setWrapStyleWord(true);
+ * kit.setAutoIndentation(true);
+ * kit.setTagCompletion(true);
  * 
  * editor.setEditorKit( kit); 
- *
+ * 
  * // Set the font style.
- * editor.setFont( new Font( "Courier", Font.PLAIN, 12)); 
+ * editor.setFont( new Font( &quot;Courier&quot;, Font.PLAIN, 12)); 
  * 
  * // Set the tab size
  * editor.getDocument().putProperty( PlainDocument.tabSizeAttribute, new Integer(4));
- * 
- * // Enable auto indentation.
- * editor.getDocument().putProperty( XMLDocument.AUTO_INDENTATION_ATTRIBUTE, new Boolean( true));
- * 
- * // Enable tag completion.
- * editor.getDocument().putProperty( XMLDocument.TAG_COMPLETION_ATTRIBUTE, new Boolean( true));
  * 
  * // Set a style
  * kit.setStyle( XMLStyleConstants.ATTRIBUTE_NAME, new Color( 255, 0, 0), Font.BOLD);
@@ -81,9 +84,11 @@ import java.util.TreeMap;
  * 
  * ...
  * </code></pre>
+ * 
  * <p>
  * To switch between line wrapped and non wrapped views use:
  * </p>
+ * 
  * <pre><code>
  * ...
  * 
@@ -97,309 +102,253 @@ import java.util.TreeMap;
  * </code></pre>
  * 
  * @version $Revision: 1.5 $, $Date: 2008/01/28 21:02:14 $
- * @author Edwin Dankert <edankert@gmail.com>, Evgeniy Smelik <sever@yandex.ru>
+ * @author Edwin Dankert <edankert@gmail.com>
  */
-public class XMLEditorKit extends DefaultEditorKit implements XMLStyleConstants {
-    private static final long serialVersionUID = 6303638967973333256L;
+public class XMLEditorKit extends DefaultEditorKit implements XMLStyleConstants, KeyListener {
+	private static final long serialVersionUID = 6303638967973333256L;
 
-    private XMLContext context  = null;
-    private ViewFactory factory = null;
-    private JEditorPane editor = null;
+	public final static String ERROR_HIGHLIGHTING_ATTRIBUTE = "errorHighlighting";
+	
+	private boolean tagCompletion = false;
+	private boolean autoIndent = false;
 
-    private boolean lineWrapping = false;
-    private boolean wrapStyleWord = false;
-    private boolean folding = false;
+	private StyleContext context = null;
+	private ViewFactory factory = null;
 
-    /**
-     * Constructs an XMLEditorKit with view factory and Context, 
-     * but with line wrapping turned off.
-     */
-    public XMLEditorKit() {
-        this( false);
-    }
+	/**
+	 * Constructs an XMLEditorKit with view factory and Context, but with line
+	 * wrapping turned off.
+	 */
+	public XMLEditorKit() {
+		context = new StyleContext();
+		
+		setStyle(ELEMENT_NAME, new Color(136, 18, 128), Font.PLAIN);
+		setStyle(ELEMENT_VALUE, Color.black, Font.PLAIN);
+		setStyle(ELEMENT_PREFIX, new Color(136, 18, 128), Font.PLAIN);
 
-    /**
-     * Called when the kit is being installed into the
-     * a JEditorPane.  
-     *
-     * @param c the JEditorPane
-     */
-    public void install(JEditorPane c) {
-        super.install( c);
+		setStyle(ATTRIBUTE_NAME, new Color(153, 69, 0), Font.PLAIN);
+		setStyle(ATTRIBUTE_VALUE, new Color(26, 26, 166), Font.PLAIN);
+		setStyle(ATTRIBUTE_PREFIX, new Color(153, 69, 0), Font.PLAIN);
 
-        this.editor = c;
-    }
+		setStyle(NAMESPACE_NAME, new Color(128, 128, 0), Font.PLAIN);
+		setStyle(NAMESPACE_VALUE, new Color(63, 95, 191), Font.PLAIN);
+		setStyle(NAMESPACE_PREFIX, new Color(128, 128, 0), Font.PLAIN);
 
-    /**
-     * Constructs the view factory and the Context.
-     * 
-     * @param lineWrapping enables line wrapping feature if true.
-     */
-    public XMLEditorKit( boolean lineWrapping) {
-        super();
+		setStyle(ENTITY, new Color(102, 102, 102), Font.PLAIN);
+		setStyle(CDATA, new Color(127, 159, 191), Font.PLAIN);
+		setStyle(COMMENT, new Color(63, 127, 95), Font.PLAIN);
+		setStyle(SPECIAL, new Color(102, 102, 102), Font.PLAIN);
 
-        factory = new XMLViewFactory();
-        context = new XMLContext();
-        
-        this.lineWrapping = lineWrapping;
-    }
-    
-    /**
-     * Returns true when line-wrapping has been turned on.
-     * 
-     * @return state of line-wrapping feature.
-     */
-    public boolean isLineWrapping() {
-        return lineWrapping;
-    }
+		factory = new XMLViewFactory();
+	}
 
-    /**
-     * Eanbles/disables the line-wrapping feature.
-     * 
-     * @param enabled true when line-wrapping enabled.
-     */
-    public void setLineWrappingEnabled( boolean enabled) {
-        lineWrapping = enabled;
-    }
+	/**
+	 * Get the MIME type of the data that this kit represents support for. This
+	 * kit supports the type <code>text/xml</code>.
+	 * 
+	 * @return the type.
+	 */
+	public String getContentType() {
+		return "text/xml";
+	}
 
-    /**
-     * Returns true when the wrapping style is 'word wrapping'.
-     * 
-     * @return the style of wrapping.
-     */
-    public boolean isWrapStyleWord() {
-        return wrapStyleWord;
-    }
+	/**
+	 * Fetches the XML factory that can produce views for XML Documents.
+	 * 
+	 * @return the XML factory
+	 */
+	public ViewFactory getViewFactory() {
+		return factory;
+	}
 
-    /**
-     * Enables/disables the word-wrapping style.
-     * 
-     * @param enabled true when word-wrapping style enabled.
-     */
-    public void setWrapStyleWord( boolean enabled) {
-        wrapStyleWord = enabled;
-    }
+	/**
+	 * @param enabled true enables the tag completion
+	 */
+	public final void setTagCompletion(boolean enabled) {
+		tagCompletion = enabled;
+	}
 
-    /**
-     * Returns true when the folding is enables
-     *
-     * @return folding status
-     */
-    public boolean isFolding() {
-        return folding;
-    }
+	/**
+	 * @param enabled true enables the auto indentation
+	 */
+	public final void setAutoIndentation(boolean enabled) {
+		autoIndent = enabled;
+	}
 
-    /**
-     * Enables/disables folding for xml
-     *
-     * @param folding true when folding enabled
-     */
-    public void setFolding(boolean folding) {
-        this.folding = folding;
-    }
+	/**
+	 * Set the style identified by the name.
+	 * 
+	 * @param token
+	 *            the style token
+	 * @param foreground
+	 *            the foreground color
+	 * @param fontStyle
+	 *            the font style Plain, Italic or Bold
+	 */
+	public void setStyle(String token, Color foreground, int fontStyle) {
+		Style s = context.getStyle(token);
+		
+		if (s == null) {
+			s = context.addStyle(token, context.new NamedStyle());
+		}
+			
+		StyleConstants.setItalic(s, (fontStyle & Font.ITALIC) > 0);
+		StyleConstants.setBold(s, (fontStyle & Font.BOLD) > 0);
+		StyleConstants.setForeground(s, foreground);
+		
+	}
+	
+	@Override
+	public void install(JEditorPane editor) {
+		super.install(editor);
 
-    /**
-     * Get the MIME type of the data that this kit represents support for. This
-     * kit supports the type <code>text/xml</code>.
-     * 
-     * @return the type.
-     */
-    public String getContentType() {
-        return "text/xml";
-    }
+		editor.addKeyListener(this);
+	}
 
-    /**
-     * Fetches the XML factory that can produce views for XML Documents.
-     * 
-     * @return the XML factory
-     */
-    public final ViewFactory getViewFactory() {
-        return factory;
-    }
-    
-    /**
-     * Set the style identified by the name.
-     * 
-     * @param name the style name
-     * @param foreground the foreground color
-     * @param fontStyle the font style Plain, Italic or Bold
-     */
-    public void setStyle( String name, Color foreground, int fontStyle) {
-        context.setStyle( name, foreground, fontStyle);
-    }
-    
-    /**
-     * @see DefaultEditorKit#createDefaultDocument()
-     */
-    public Document createDefaultDocument() {
-        return new XMLDocument( editor);
-    }
-    
-    /**
-     * @see DefaultEditorKit#read( java.io.Reader, javax.swing.text.Document, int)
-     */
-    public void read( Reader in, Document doc, int pos) throws IOException, BadLocationException {
-        doc.putProperty( XMLDocument.LOADING_ATTRIBUTE, Boolean.TRUE);
-        
-        super.read( in, doc, pos);
+	@Override
+	public void deinstall(JEditorPane editor) {
+		super.deinstall(editor);
+		
+		editor.removeKeyListener(this);
+	}
 
-        doc.putProperty( XMLDocument.LOADING_ATTRIBUTE, Boolean.FALSE);
-        if (folding) {
-            if (doc.getProperty(XMLDocument.FOLDING_MARKING) == null) {
-                editor.setBorder(BorderFactory.createEmptyBorder(0, 15, 0, 0));
-                editor.addMouseListener(new FoldingMouseListener());
-                doc.putProperty(XMLDocument.FOLDING_MARKING, new TreeMap<Integer, XMLViewUtilities.TagInfo>());
-                doc.putProperty(XMLDocument.ORIGINAL_DOCUMENT, doc.getText(0, doc.getLength() - 1));
-            }
-        }
-    }
+	/**
+	 * A simple view factory implementation.
+	 */
+	class XMLViewFactory implements ViewFactory {
+		/**
+		 * Creates the XML View.
+		 * 
+		 * @param elem
+		 *            the root element.
+		 * @return the XMLView
+		 */
+		public View create(Element elem) {
+			try {
+				return new XMLView(new XMLScanner(elem.getDocument()), context, elem);
+			} catch (IOException e) {
+				// Instead of an IOException, this will return null if the
+				// XMLView could not be instantiated.
+				// Should never happen.
+			}
 
-    /**
-     * @see DefaultEditorKit#read( java.io.InputStream, javax.swing.text.Document, int)
-     */
-    public void read( InputStream in, Document doc, int pos) throws IOException, BadLocationException {
-        doc.putProperty( XMLDocument.LOADING_ATTRIBUTE, Boolean.TRUE);
-        
-        super.read( in, doc, pos);
+			return null;
+		}
+	}
+	
+	private static void completeTag(Document document, int off) throws BadLocationException {
+		StringBuffer endTag = new StringBuffer();
 
-        doc.putProperty( XMLDocument.LOADING_ATTRIBUTE, Boolean.FALSE);
-        if (folding) {
-            if (doc.getProperty(XMLDocument.FOLDING_MARKING) == null) {
-                editor.setBorder(BorderFactory.createEmptyBorder(0, 15, 0, 0));
-                editor.addMouseListener(new FoldingMouseListener());
-                doc.putProperty(XMLDocument.FOLDING_MARKING, new TreeMap<Integer, XMLViewUtilities.TagInfo>());
-                doc.putProperty(XMLDocument.ORIGINAL_DOCUMENT, doc.getText(0, doc.getLength() - 1));
-            }
-        }
-    }
+		String text = document.getText(0, off);
+		int startTag = text.lastIndexOf('<', off);
+		int prefEndTag = text.lastIndexOf('>', off);
 
-    /**
-     * A simple view factory implementation.
-     */
-    class XMLViewFactory implements ViewFactory {
-        /**
-         * Creates the XML View.
-         * 
-         * @param elem the root element.
-         * @return the XMLView
-         */
-        public View create( Element elem) {
-            if ( lineWrapping) {
-                try {
-                    return new WrappedXMLView(context, elem, wrapStyleWord);
-                } catch ( IOException e) {
-                    // Instead of an IOException, this will return null if the 
-                    // WrappedXMLView could not be instantiated.
-                    // Should never happen.
-                }
-            } else {
-                try {
-                    return new XMLView( context, elem);
-                } catch ( IOException e) {
-                    // Instead of an IOException, this will return null if the 
-                    // XMLView could not be instantiated. 
-                    // Should never happen.
-                }
-            }
+		// If there was a start tag and if the start tag is not empty
+		// and if the start-tag has not got an end-tag already.
+		if ((startTag > 0) && (startTag > prefEndTag) && (startTag < text.length() - 1)) {
+			String tag = text.substring(startTag, text.length());
+			char first = tag.charAt(1);
 
-            return null;
-        }
-    }
+			if (first != '/' && first != '!' && first != '?' && !Character.isWhitespace(first)) {
+				boolean finished = false;
+				char previous = tag.charAt(tag.length() - 1);
 
-    class FoldingMouseListener extends MouseAdapter {
-        FoldingMouseListener() {
-        }
+				if (previous != '/' && previous != '-') {
 
-        @SuppressWarnings({"unchecked"})
-        public void mouseClicked(MouseEvent e) {
-            Point clickPoint = e.getPoint();
+					endTag.append("</");
 
-            Document document = editor.getDocument();
-            Map<Integer, XMLViewUtilities.TagInfo> tagsMap = (Map<Integer, XMLViewUtilities.TagInfo>) document.getProperty(XMLDocument.FOLDING_MARKING);
-            if (tagsMap != null) {
-                XMLViewUtilities.TagInfo tagInfo = null;
+					for (int i = 1; (i < tag.length()) && !finished; i++) {
+						char ch = tag.charAt(i);
 
-                for (Integer key : tagsMap.keySet()) {
-                    tagInfo = tagsMap.get(key);
-                    Polygon polygon = tagInfo.getFirstPolygon();
-                    if (polygon != null && polygon.contains(clickPoint)) break;
-                    if (!tagInfo.isFolded()) {
-                        polygon = tagInfo.getSecondPolygon();
-                        if (polygon != null && polygon.contains(clickPoint)) break;
-                    }
-                    tagInfo = null;
-                }
+						if (!Character.isWhitespace(ch)) {
+							endTag.append(ch);
+						} else {
+							finished = true;
+						}
+					}
 
-                if (tagInfo != null) {
-                    try {
-                        tagInfo.setFolded(!tagInfo.isFolded());
-                        StringBuffer originalTextBuffer = new StringBuffer((String) document.getProperty(XMLDocument.ORIGINAL_DOCUMENT));
-                        String currentText = document.getText(0, document.getLength());
-                        XMLViewUtilities.TagInfo curTagInfo;
+					endTag.append(">");
+				}
+			}
+		}
 
-                        int skipMark = -1, startMark, offset = 0;
-                        String tempString;
+		document.insertString(off, endTag.toString(), null);
+	}
 
-                        for (Integer key : tagsMap.keySet()) {
-                            curTagInfo = tagsMap.get(key);
-                            if (skipMark != -1 && skipMark != key) {
-                                continue;
-                            } else {
-                                if (skipMark == -1 && curTagInfo.isFolded()) {
-                                    skipMark = curTagInfo.getSecondMark();
-                                } else {
-                                    skipMark = -1;
-                                }
-                            }
+	private static void autoIndent(Document document, int off) throws BadLocationException {
+		StringBuffer newStr = new StringBuffer("\r\n");
+		Element elem = document.getDefaultRootElement().getElement(document.getDefaultRootElement().getElementIndex(off));
+		int start = elem.getStartOffset();
+//		int end = elem.getEndOffset();
+		String line = document.getText(start, off - start);
 
-                            if ((curTagInfo.equals(tagInfo) || curTagInfo.isFolded()) && !curTagInfo.isProcessed()) {
-                                startMark = curTagInfo.getFirstMark();
+		boolean finished = false;
 
-                                if (curTagInfo.isFolded()) {
-                                    startMark += offset;
-                                    int lastOriginalMark = originalTextBuffer.indexOf("</" + curTagInfo.getTag() + ">", startMark);
-                                    //int removed =
-                                            removeFragment(originalTextBuffer, startMark, lastOriginalMark + curTagInfo.getTag().length() + 3);
-                                    tempString = "<" + curTagInfo.getTag() + " {...}/>";
-                                    int inserted = insertFragment(originalTextBuffer, startMark, tempString);
+		for (int i = 0; (i < line.length()) && !finished; i++) {
+			char ch = line.charAt(i);
 
-                                    if (curTagInfo.equals(tagInfo)) {
-                                        int lastCurrentMark = currentText.indexOf("</" + curTagInfo.getTag() + ">", startMark);
-                                        offset += startMark - lastCurrentMark - curTagInfo.getTag().length() - 3;
-                                        offset += inserted;
-                                    }
-                                } else {
-                                    if (curTagInfo.equals(tagInfo)) {
-                                        startMark += offset;
-                                        int lastOriginalMark = originalTextBuffer.indexOf("</" + curTagInfo.getTag() + ">", startMark);
-                                        offset -= curTagInfo.getTag().length() + 9;
-                                        offset += lastOriginalMark + curTagInfo.getTag().length() + 3 - startMark;
-                                    }
-                                }
-                                curTagInfo.setProcessed(true);
-                            } else {
-                                curTagInfo.setProcessed(false);
-                            }
-                        }
+			if (((ch != '\n') && (ch != '\f') && (ch != '\r')) && Character.isWhitespace(ch)) {
+				newStr.append(ch);
+			} else {
+				finished = true;
+			}
+		}
 
-                        int caretPosition = editor.getCaretPosition();
-                        editor.setText(originalTextBuffer.toString());
-                        if (caretPosition < originalTextBuffer.length()) editor.setCaretPosition(caretPosition);
-                    } catch (BadLocationException ble) {
-                        ble.printStackTrace();
-                    }
-                }
-            }
-        }
+		if (isStartElement(line)) {
+			newStr.append("\t");
+		}
 
-        private int insertFragment(StringBuffer stringBuffer, int offset, String string) {
-            stringBuffer.insert(offset, string);
-            return string.length();
-        }
+		document.insertString(off, newStr.toString(), null);
+	}
+	
+	// Tries to find out if the line finishes with an element start
+	private static boolean isStartElement(String line) {
+		boolean result = false;
 
-        private int removeFragment(StringBuffer stringBuffer, int startIndex, int endIndex) {
-            stringBuffer.delete(startIndex, endIndex);
-            return startIndex - endIndex;
-        }
-    }
+		int first = line.lastIndexOf("<");
+		int last = line.lastIndexOf(">");
+
+		if (last < first) { // In the Tag
+			result = true;
+		} else {
+			int firstEnd = line.lastIndexOf("</");
+			int lastEnd = line.lastIndexOf("/>");
+
+			// Last Tag is not an End Tag
+			if ((firstEnd != first) && ((lastEnd + 1) != last)) {
+				result = true;
+			}
+		}
+
+		return result;
+	}
+
+	@Override
+	public void keyPressed(KeyEvent event) {
+		JEditorPane editor = (JEditorPane)event.getSource();
+		
+		if (event.getKeyChar() == '>' && tagCompletion) {
+			try {
+				int pos = editor.getCaretPosition();
+				completeTag(editor.getDocument(), pos);
+				editor.setCaretPosition(pos);
+			} catch (BadLocationException e) {
+				e.printStackTrace();
+			}
+		} else if (event.getKeyChar() == '\n' && autoIndent) {
+			try {
+				autoIndent(editor.getDocument(), editor.getCaretPosition());
+				event.consume();
+			} catch (BadLocationException e) {
+				e.printStackTrace();
+			}
+		}
+
+	}
+
+	@Override
+	public void keyReleased(KeyEvent keyevent) {}
+
+	@Override
+	public void keyTyped(KeyEvent keyevent) {}
 }

@@ -1,7 +1,7 @@
 /*
  * $Id: XMLStyleConstants.java,v 1.3 2009/01/22 22:14:59 edankert Exp $
  *
- * Copyright (c) 2002 - 2008, Edwin Dankert
+ * Copyright (c) 2002 - 2009, Edwin Dankert
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without 
@@ -77,4 +77,9 @@ public interface XMLStyleConstants {
     public static final String SPECIAL          = "Special";
     /** The style constant for string */
     public static final String STRING           = "String";
+
+    public static final String WHITESPACE       = "Whitespace";
+
+    /** The style constant for entity */
+    public static final String ENTITY_REFERENCE = "EntityReference";
 }

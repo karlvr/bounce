@@ -94,7 +94,7 @@ public class LineNumberMargin extends JComponent {
 		
 		setBorder(new CompoundBorder(
 						new MatteBorder(0, 0, 0, 1, UIManager.getColor("controlShadow")), 
-						new EmptyBorder(0, 2, 0, 2)));
+						new EmptyBorder(0, 1, 0, 1)));
 		
 		addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {

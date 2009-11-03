@@ -1,7 +1,7 @@
 /*
  * $Id: XMLView.java,v 1.4 2008/04/16 19:36:18 edankert Exp $
  *
- * Copyright (c) 2002 - 2008, Edwin Dankert, Evgeniy Smelik 
+ * Copyright (c) 2002 - 2008, Edwin Dankert
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without 
@@ -29,10 +29,14 @@
 
 package org.bounce.text.xml;
 
-import javax.swing.text.*;
-
-import java.awt.*;
 import java.io.IOException;
+
+import javax.swing.text.Document;
+import javax.swing.text.Element;
+import javax.swing.text.StyleContext;
+
+import org.bounce.text.SyntaxHighlightingScanner;
+import org.bounce.text.SyntaxHighlightingView;
 
 /**
  * The XML View uses the XML scanner to determine the style (font, color) of the
@@ -43,85 +47,39 @@ import java.io.IOException;
  * Prinzing </b>. See:
  * http://java.sun.com/products/jfc/tsc/articles/text/editor_kit/
  * </p>
- *
- * @author Edwin Dankert <edankert@gmail.com>, Evgeniy Smelik <sever@yandex.ru>
+ * 
+ * @author Edwin Dankert <edankert@gmail.com>
  * @version $Revision: 1.4 $, $Date: 2008/04/16 19:36:18 $
  */
-public class XMLView extends PlainView {
-    private Color selected = null;
-    
-    private XMLScanner scanner = null;
-    private XMLContext context = null;
+public class XMLView extends SyntaxHighlightingView {
+	/**
+	 * Construct a colorized view of xml text for the element. Gets the current
+	 * document and creates a new Scanner object.
+	 * 
+	 * @param context
+	 *            the styles used to colorize the view.
+	 * @param elem
+	 *            the element to create the view for.
+	 * @throws IOException
+	 *             input/output exception while reading document
+	 */
+	public XMLView(XMLScanner scanner, StyleContext context, Element elem) throws IOException {
+		super(scanner, context, elem);
+	}
 
-    /**
-     * Construct a colorized view of xml text for the element. Gets the current
-     * document and creates a new Scanner object.
-     *
-     * @param context the styles used to colorize the view.
-     * @param elem    the element to create the view for.
-     * @throws IOException input/output exception while reading document
-     */
-    public XMLView(XMLContext context, Element elem) throws IOException {
-        super(elem);
+	// Update the scanner to point to the '<' begin token.
+	protected void updateScanner(SyntaxHighlightingScanner scanner, Document doc, int start, int end) {
+		XMLViewUtilities.updateScanner(scanner, doc, start, end);
+	}
 
-        this.context = context;
-        Document doc = getDocument();
+	@Override
+	protected boolean isErrorHighlighting() {
+		Object errorHighlighting = getDocument().getProperty(XMLEditorKit.ERROR_HIGHLIGHTING_ATTRIBUTE);
 
-        scanner = new XMLScanner(doc);
-    }
+		if (errorHighlighting != null) {
+			return (Boolean) errorHighlighting;
+		}
 
-    /**
-     * Invalidates the scanner, to make sure a new range is set later.
-     *
-     * @param g the graphics context.
-     * @param a the shape.
-     * @see View#paint(Graphics g, Shape a)
-     */
-    public void paint(Graphics g, Shape a) {
-        JTextComponent jtextcomponent = (JTextComponent)getContainer();
-        Highlighter highlighter = jtextcomponent.getHighlighter();
-        Color unselected = jtextcomponent.isEnabled() ? jtextcomponent.getForeground() : jtextcomponent.getDisabledTextColor();
-        Caret caret = jtextcomponent.getCaret();
-        selected = !caret.isSelectionVisible() || highlighter == null ? unselected : jtextcomponent.getSelectedTextColor();
-
-        super.paint(g, a);
-
-        scanner.setValid(false);
-
-        XMLViewUtilities.drawBorder(this, g, a, getDocument());
-    }
-
-    /**
-     * Renders the given range in the model as normal unselected text. This will
-     * paint the text according to the styles..
-     *
-     * @param g     the graphics context
-     * @param x     the starting X coordinate
-     * @param y     the starting Y coordinate
-     * @param start the beginning position in the model
-     * @param end   the ending position in the model
-     * @return the location of the end of the range
-     * @throws BadLocationException if the range is invalid
-     */
-    protected int drawUnselectedText(Graphics g, int x, int y, int start, int end) throws BadLocationException {
-        return XMLViewUtilities.drawUnselectedText(this, scanner, context, g, x, y, start, end);
-    }
-
-    /**
-     * Renders the given range in the model as selected text. This will paint
-     * the text according to the font as found in the styles..
-     *
-     * @param g     the graphics context
-     * @param x     the starting X coordinate
-     * @param y     the starting Y coordinate
-     * @param start the beginning position in the model
-     * @param end   the ending position in the model
-     * @return the location of the end of the range
-     * @throws BadLocationException if the range is invalid
-     */
-    protected int drawSelectedText(Graphics g, int x, int y, int start, int end) throws BadLocationException {
-        g.setColor(selected);
-        
-        return XMLViewUtilities.drawSelectedText(this, scanner, context, g, x, y, start, end);
-    }
+		return false;
+	}
 }
