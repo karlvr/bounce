@@ -32,12 +32,10 @@ package org.bounce.text.xml;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-import javax.swing.JButton;
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.text.PlainDocument;
 
@@ -47,78 +45,72 @@ import org.bounce.text.ScrollableEditorPanel;
 /**
  * Simple wrapper around JEditorPane to browse java text using the XMLEditorKit
  * plug-in.
+ * 
+ * java XmlKitTest filename
  */
 public class XMLKitTest {
-    private static JEditorPane editor = null;
+	private static JEditorPane editor = null;
 
-    /**
-     * Main method...
-     * 
-     * @param args
-     */
-    public static void main( String[] args) {
-        try {
-            editor = new JEditorPane();
-            
-            // Instantiate a XMLEditorKit with wrapping enabled.
-            XMLEditorKit kit = new XMLEditorKit(true);
+	/**
+	 * Main method...
+	 * 
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		if (args.length != 1) {
+			System.err.println("need filename argument");
+			System.exit(1);
+		}
 
-            // Set the wrapping style.
-            kit.setWrapStyleWord(true);
-            kit.setFolding(true);
-            
-            editor.setEditorKit(kit);
+		try {
+			editor = new JEditorPane();
 
-            editor.read(XMLKitTest.class.getResourceAsStream("/test.xml"), null);
+			// Instantiate a XMLEditorKit with wrapping enabled.
+			XMLEditorKit kit = new XMLEditorKit();
 
-            // Set the font style.
-            editor.setFont(new Font("Courier", Font.PLAIN, 12));
+			editor.setEditorKit(kit);
 
-            // Set the tab size
-            editor.getDocument().putProperty(PlainDocument.tabSizeAttribute, 
-                                             new Integer(4));
+			editor.read(XMLKitTest.class.getResourceAsStream("/test.xml"), null);
 
-            // Enable auto indentation.
-            editor.getDocument().putProperty(XMLDocument.AUTO_INDENTATION_ATTRIBUTE, 
-                                             new Boolean(true));
+			// Set the font style.
+			editor.setFont(new Font("Courier", Font.PLAIN, 12));
 
-            // Enable tag completion.
-            editor.getDocument().putProperty(XMLDocument.TAG_COMPLETION_ATTRIBUTE, 
-                                             new Boolean(true));
-            
-            // Set a style
-            kit.setStyle( XMLStyleConstants.ATTRIBUTE_NAME, new Color( 255, 0, 0), 
-                          Font.BOLD);
-            
-            // Put the editor in a panel that will force it to resize, when a different 
-            // view is choosen.
-            ScrollableEditorPanel editorPanel = new ScrollableEditorPanel( editor);
+			// Set the tab size
+			editor.getDocument().putProperty(PlainDocument.tabSizeAttribute, new Integer(4));
 
-            JScrollPane scroller = new JScrollPane(editorPanel);
+			// Enable auto indentation.
+			kit.setAutoIndentation(true);
 
-            // Add the number margin as a Row Header View
-            scroller.setRowHeaderView(new LineNumberMargin(editor));
-            
-            JFrame f = new JFrame( "XmlEditorKitTest: " + args[0]);
-            f.getContentPane().setLayout( new BorderLayout());
-            f.getContentPane().add( scroller, BorderLayout.CENTER);
-            
-            JButton button = new JButton( "Toggle Wrapping");
-            button.addActionListener( new ActionListener() {
-                public void actionPerformed( ActionEvent e) {
-                    XMLEditorKit kit = (XMLEditorKit)editor.getEditorKit();
-                    kit.setLineWrappingEnabled( !kit.isLineWrapping());
-                    
-                    // Update the UI and create a new view...
-                    editor.updateUI();
-                }
-            });
-            f.getContentPane().add( button, BorderLayout.SOUTH);
-            f.setSize( 600, 600);
-            f.setVisible( true);
-        } catch ( Throwable e) {
-            e.printStackTrace();
-            System.exit( 1);
-        }
-    }
+			// Enable error highlighting.
+			editor.getDocument().putProperty(XMLEditorKit.ERROR_HIGHLIGHTING_ATTRIBUTE, new Boolean(true));
+
+			// Enable tag completion.
+			kit.setTagCompletion(true);
+
+			// Set a style
+			kit.setStyle(XMLStyleConstants.ATTRIBUTE_NAME, new Color(255, 0, 0), Font.BOLD);
+
+			// Put the editor in a panel that will force it to resize, when a
+			// different view is choosen.
+			ScrollableEditorPanel editorPanel = new ScrollableEditorPanel(editor);
+
+			JScrollPane scroller = new JScrollPane(editorPanel);
+
+			// Add the number margin as a Row Header View
+			JPanel rowHeader = new JPanel(new BorderLayout());
+			rowHeader.add(new XMLFoldingMargin(editor), BorderLayout.EAST);
+			rowHeader.add(new LineNumberMargin(editor), BorderLayout.WEST);
+			scroller.setRowHeaderView(rowHeader);
+
+			JFrame f = new JFrame("XmlEditorKitTest: " + args[0]);
+			f.getContentPane().setLayout(new BorderLayout());
+			f.getContentPane().add(scroller, BorderLayout.CENTER);
+
+			f.setSize(600, 600);
+			f.setVisible(true);
+		} catch (Throwable e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+	}
 }

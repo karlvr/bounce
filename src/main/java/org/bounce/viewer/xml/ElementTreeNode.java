@@ -30,6 +30,7 @@
 package org.bounce.viewer.xml;
 
 
+import org.bounce.xml.DOMUtils;
 import org.w3c.dom.Comment;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -51,7 +52,7 @@ class ElementTreeNode extends NodeTreeNode {
 	ElementTreeNode(Element element) {
         super(element);
 		
-		if (!ScannerUtils.isMixed(element)) {
+		if (!DOMUtils.isMixed(element)) {
             boolean hasChildElements = false;
             NodeList nodes = element.getChildNodes();
 			for ( int i = 0; i < nodes.getLength(); i++) {

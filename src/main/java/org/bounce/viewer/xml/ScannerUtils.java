@@ -31,6 +31,7 @@ package org.bounce.viewer.xml;
 
 import java.util.List;
 
+import org.bounce.xml.DOMUtils;
 import org.w3c.dom.Attr;
 import org.w3c.dom.CharacterData;
 import org.w3c.dom.Comment;
@@ -77,7 +78,7 @@ public class ScannerUtils {
 			}
 		}
 
-		styledEnd.addString(new StyledString.ElementName(ScannerUtils.getName(elem)));
+		styledEnd.addString(new StyledString.ElementName(DOMUtils.getName(elem)));
 		styledEnd.addString(StyledString.CLOSE_BRACKET);
 		current.addStyledElement(styledEnd);
 
@@ -86,7 +87,7 @@ public class ScannerUtils {
 
 	static Line scanElement(List<Line> lines, Line current, Element elem) {
 
-		if (ScannerUtils.isMixed(elem)) {
+		if (DOMUtils.isMixed(elem)) {
 			current = ScannerUtils.scanMixedElement(lines, current, elem);
 
 			if (showValues()) {
@@ -96,10 +97,10 @@ public class ScannerUtils {
 			current = ScannerUtils.scanStartTag(lines, current, elem);
 
 			if (showValues()) {
-				if (ScannerUtils.hasContent(elem)) {
+				if (DOMUtils.hasContent(elem)) {
 					current = ScannerUtils.scanContent(lines, current, elem);
 
-					if (ScannerUtils.isTextOnly(elem)) {
+					if (DOMUtils.isTextOnly(elem)) {
 						current = ScannerUtils.scanEndTag(lines, current, elem);
 					}
 				}
@@ -149,7 +150,7 @@ public class ScannerUtils {
 			}
 		}
 
-		styledElement.addString(new StyledString.ElementName(ScannerUtils.getName(elem)));
+		styledElement.addString(new StyledString.ElementName(DOMUtils.getName(elem)));
 		current.addStyledElement(styledElement);
 
 		NamedNodeMap attributes = elem.getAttributes();
@@ -161,7 +162,7 @@ public class ScannerUtils {
 
 			if (prefix != null && prefix.length() > 0 && "xmlns".equals(prefix)) {
 				sa = ScannerUtils.formatNamespace(attribute);
-			} else if ((prefix == null || prefix.length() == 0) && "xmlns".equals(getName(attribute)) && elem.getNamespaceURI() != null) {
+			} else if ((prefix == null || prefix.length() == 0) && "xmlns".equals(DOMUtils.getName(attribute)) && elem.getNamespaceURI() != null) {
 				sa = ScannerUtils.formatNamespace(attribute);
 			} else {
 				sa = ScannerUtils.formatAttribute(attribute);
@@ -180,9 +181,9 @@ public class ScannerUtils {
 			}
 		}
 
-		if (!ScannerUtils.hasContent(elem)) {
+		if (!DOMUtils.hasContent(elem)) {
 			current.addStyledString(StyledString.SLASH);
-		} else if (ScannerUtils.isTextOnly(elem) && !showValues()) {
+		} else if (DOMUtils.isTextOnly(elem) && !showValues()) {
 			current.addStyledString(StyledString.SLASH);
 		}
 
@@ -198,7 +199,7 @@ public class ScannerUtils {
         if (node instanceof CharacterData) {
             text = ((CharacterData)node).getData();
         } else if (node instanceof Element) {
-            text = ScannerUtils.getText((Element)node);
+            text = DOMUtils.getText((Element)node);
         }
 
 		if ((current.length() + 1 >= MAX_LINE_LENGTH) && (text.length() > 0)) {
@@ -315,7 +316,7 @@ public class ScannerUtils {
 				}
 			}
 	
-			styledAttribute.addString(new StyledString.AttributeName(ScannerUtils.getName(a)));
+			styledAttribute.addString(new StyledString.AttributeName(DOMUtils.getName(a)));
 			styledAttribute.addString(StyledString.ATTRIBUTE_ASIGN);
 			styledAttribute.addString(new StyledString.AttributeValue(a.getValue()));
 		}
@@ -334,7 +335,7 @@ public class ScannerUtils {
 
 			if (prefix != null && prefix.length() > 0) {
 				styledNamespace.addString(StyledString.NAMESPACE_COLON);
-				styledNamespace.addString(new StyledString.NamespacePrefix(ScannerUtils.getName(a)));
+				styledNamespace.addString(new StyledString.NamespacePrefix(DOMUtils.getName(a)));
 			}
 	
 			styledNamespace.addString(StyledString.NAMESPACE_ASIGN);
@@ -344,89 +345,97 @@ public class ScannerUtils {
 		return styledNamespace;
 	}
 
-	private static boolean isWhiteSpace(Text node) {
-		return node.getData().trim().length() == 0;
-	}
-
-	// solves a problem in the Element that hasMixedContent returns true when
-	// the content has comment information.
-	public static boolean isMixed(Element element) {
-		boolean elementFound = false;
-		boolean textFound = false;
-
-		NodeList nodes = element.getChildNodes();
-
-		for (int i = 0; i < nodes.getLength(); i++) {
-			Node node = nodes.item(i);
-
-			if (node instanceof Element) {
-				elementFound = true;
-			} else if (node instanceof Text) {
-				if (!isWhiteSpace((Text) node)) {
-					textFound = true;
-				}
-			}
-
-			if (textFound && elementFound) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	public static String getName(Attr attribute) {
-		if (attribute.getLocalName() == null) {
-			return attribute.getName();
-		}
-
-		return attribute.getLocalName();
-	}
-
-	public static String getName(Element element) {
-		if (element.getLocalName() == null) {
-			return element.getTagName();
-		}
-
-		return element.getLocalName();
-	}
-
-	public static String getQName(Element element) {
-		if (element.getTagName() != null) {
-			return element.getTagName();
-		}
-
-		return element.getLocalName();
-	}
-
-	private static boolean hasContent(Element element) {
-		return element.getChildNodes().getLength() > 0;
-	}
-
-	private static String getText(Element element) {
-		StringBuilder text = new StringBuilder();
-		NodeList nodes = element.getChildNodes();
-
-		for (int i = 0; i < nodes.getLength(); i++) {
-			if (nodes.item(i) instanceof Text) {
-				text.append(((Text)nodes.item(i)).getData());
-			}
-		}
-
-		return text.toString().trim();
-	}
-
-	private static boolean isTextOnly(Element element) {
-		NodeList nodes = element.getChildNodes();
-
-		for (int i = 0; i < nodes.getLength(); i++) {
-			if (!(nodes.item(i) instanceof Text)) {
-				return false;
-			}
-		}
-
-		return true;
-	}
+//	private static boolean isWhiteSpace(Text node) {
+//		return node.getData().trim().length() == 0;
+//	}
+//
+//	// solves a problem in the Element that hasMixedContent returns true when
+//	// the content has comment information.
+//	public static boolean isMixed(Element element) {
+//		boolean elementFound = false;
+//		boolean textFound = false;
+//
+//		NodeList nodes = element.getChildNodes();
+//
+//		for (int i = 0; i < nodes.getLength(); i++) {
+//			Node node = nodes.item(i);
+//
+//			if (node instanceof Element) {
+//				elementFound = true;
+//			} else if (node instanceof Text) {
+//				if (!isWhiteSpace((Text) node)) {
+//					textFound = true;
+//				}
+//			}
+//
+//			if (textFound && elementFound) {
+//				return true;
+//			}
+//		}
+//
+//		return false;
+//	}
+//
+//	public static String getName(Attr attribute) {
+//		if (attribute.getLocalName() == null) {
+//			return attribute.getName();
+//		}
+//
+//		return attribute.getLocalName();
+//	}
+//
+//	public static String getName(Element element) {
+//		if (element.getLocalName() == null) {
+//			return element.getTagName();
+//		}
+//
+//		return element.getLocalName();
+//	}
+//
+//	public static String getQName(Element element) {
+//		if (element.getTagName() != null) {
+//			return element.getTagName();
+//		}
+//
+//		return element.getLocalName();
+//	}
+//
+//	public static String getQName(Attr attribute) {
+//		if (attribute.getLocalName() != null) {
+//			return attribute.getName();
+//		}
+//
+//		return attribute.getLocalName();
+//	}
+//
+//	private static boolean hasContent(Element element) {
+//		return element.getChildNodes().getLength() > 0;
+//	}
+//
+//	private static String getText(Element element) {
+//		StringBuilder text = new StringBuilder();
+//		NodeList nodes = element.getChildNodes();
+//
+//		for (int i = 0; i < nodes.getLength(); i++) {
+//			if (nodes.item(i) instanceof Text) {
+//				text.append(((Text)nodes.item(i)).getData());
+//			}
+//		}
+//
+//		return text.toString().trim();
+//	}
+//
+//	private static boolean isTextOnly(Element element) {
+//		NodeList nodes = element.getChildNodes();
+//
+//		for (int i = 0; i < nodes.getLength(); i++) {
+//			if (!(nodes.item(i) instanceof Text)) {
+//				return false;
+//			}
+//		}
+//
+//		return true;
+//	}
 
 	public static boolean showNamespaces() {
 		return System.getProperty(SHOW_NAMESPACES, String.valueOf(true)).equals(String.valueOf(true));

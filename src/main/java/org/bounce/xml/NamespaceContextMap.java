@@ -106,7 +106,7 @@ public class NamespaceContextMap extends HashMap<String,String> implements Names
 	 * 
 	 * @see javax.xml.namespace.NamespaceContext#getPrefix(java.lang.String)
 	 */
-	public Iterator getPrefixes(String namespaceURI) {
+	public Iterator<String> getPrefixes(String namespaceURI) {
 		if ( namespaceURI == null) {
 			throw new IllegalArgumentException("Namespace URI cannot be null.");
 		}
