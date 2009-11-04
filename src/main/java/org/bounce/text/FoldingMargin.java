@@ -56,8 +56,8 @@ import javax.swing.text.Element;
 import javax.swing.text.JTextComponent;
 
 /**
- * Base folding margin for a JTextComponent.
- * Just implement the getLastFoldLine() method.
+ * Base folding margin for a JTextComponent. Just implement the
+ * getLastFoldLine() method.
  * 
  * @author Edwin Dankert <edankert@gmail.com>
  */
@@ -83,11 +83,8 @@ public abstract class FoldingMargin extends JComponent {
 	 */
 	public FoldingMargin(JTextComponent editor) throws IOException {
 		this.editor = editor;
-		
-		this.setBorder(
-				new CompoundBorder(
-						new MatteBorder(0, 0, 0, 1, UIManager.getColor("controlShadow")),
-						new EmptyBorder(0, 1, 0, 1)));
+
+		this.setBorder(new CompoundBorder(new MatteBorder(0, 0, 0, 1, UIManager.getColor("controlShadow")), new EmptyBorder(0, 1, 0, 1)));
 
 		editor.getDocument().putProperty(Fold.FOLD_LIST_ATTRIBUTE, new ArrayList<Fold>());
 
@@ -112,13 +109,13 @@ public abstract class FoldingMargin extends JComponent {
 			public void removeUpdate(DocumentEvent documentevent) {
 				updateFolds();
 			}
-			
+
 		});
 
 		editor.addCaretListener(new CaretListener() {
 			public void caretUpdate(CaretEvent evt) {
-	            Element e = FoldingMargin.this.editor.getDocument().getDefaultRootElement();
-	            unfold(e.getElementIndex(evt.getDot()));
+				Element e = FoldingMargin.this.editor.getDocument().getDefaultRootElement();
+				unfold(e.getElementIndex(evt.getDot()));
 
 				repaint();
 			}
@@ -128,7 +125,7 @@ public abstract class FoldingMargin extends JComponent {
 			public void mouseExited(MouseEvent e) {
 				FoldingMargin.this.start = -1;
 				FoldingMargin.this.end = -1;
-				
+
 				repaint();
 			}
 
@@ -142,10 +139,11 @@ public abstract class FoldingMargin extends JComponent {
 			public void mouseMoved(MouseEvent e) {
 				int start = getLineNumber(e.getY());
 				boolean update = FoldingMargin.this.start == -1;
-				
+
 				if (start != FoldingMargin.this.start) {
-					int end = getLastFoldLine(start);
-	
+					Rectangle visible = getVisibleRect(); 
+					int end = getLastFoldLine(start, Math.min(getLineNumber(visible.y + visible.height) + 2, getLines() - 1));
+
 					if (end != -1) {
 						FoldingMargin.this.start = start;
 						FoldingMargin.this.end = end;
@@ -164,12 +162,12 @@ public abstract class FoldingMargin extends JComponent {
 
 	@SuppressWarnings("unchecked")
 	private List<Fold> getFolds() {
-		List<Fold> folds = (List<Fold>)editor.getDocument().getProperty(Fold.FOLD_LIST_ATTRIBUTE);
-		
+		List<Fold> folds = (List<Fold>) editor.getDocument().getProperty(Fold.FOLD_LIST_ATTRIBUTE);
+
 		if (folds == null) {
 			folds = Collections.EMPTY_LIST;
 		}
-		
+
 		return folds;
 	}
 
@@ -177,7 +175,7 @@ public abstract class FoldingMargin extends JComponent {
 		if (isFolded(line + 1)) {
 			unfold(line + 1);
 		} else {
-			int end = getLastFoldLine(line);
+			int end = getLastFoldLine(line, getLines() - 1);
 
 			if (end != -1) {
 				fold(editor.getDocument().getDefaultRootElement().getElement(line), editor.getDocument().getDefaultRootElement().getElement(end));
@@ -206,32 +204,26 @@ public abstract class FoldingMargin extends JComponent {
 
 	public Dimension getPreferredSize() {
 		if (isVisible()) {
-			super.getPreferredSize();
-
 			return new Dimension(getInsets().left + ICON_WIDTH + getInsets().right, editor.getPreferredSize().height);
-		} else {
-			return null;
 		}
+
+		return null;
 	}
 
 	public Dimension getMaximumSize() {
 		if (isVisible()) {
-			super.getMaximumSize();
-
 			return new Dimension(getInsets().left + ICON_WIDTH + getInsets().right, editor.getPreferredSize().height);
-		} else {
-			return null;
 		}
+
+		return null;
 	}
 
 	public Dimension getMinimumSize() {
 		if (isVisible()) {
-			super.getMinimumSize();
-
 			return new Dimension(getInsets().left + ICON_WIDTH + getInsets().right, editor.getPreferredSize().height);
-		} else {
-			return null;
 		}
+
+		return null;
 	}
 
 	public void setFont(Font font) {
@@ -255,44 +247,37 @@ public abstract class FoldingMargin extends JComponent {
 	public void paintComponent(Graphics g) {
 		if (fontMetrics != null) {
 			int lineHeight = getLineHeight();
-			Rectangle drawHere = g.getClipBounds();
+			Rectangle bounds = g.getClipBounds();
 
 			// Paint the background
 			g.setColor(getBackground());
-			g.fillRect(drawHere.x, drawHere.y, drawHere.width, drawHere.height);
+			g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
 
 			// Determine the number of lines to draw in the foreground.
 			g.setColor(getForeground());
 
-			int startLineNumber = 0;
-			int endLineNumber = startLineNumber + (drawHere.height / lineHeight);
-
-			startLineNumber = getLineNumber(drawHere.y);
-			if (startLineNumber > 1) {
-				startLineNumber = startLineNumber - 1;
+			int startLine = getLineNumber(bounds.y);
+			if (startLine > 0) {
+				startLine--;
 			}
 
-			int lines = getLines();
-			endLineNumber = getLineNumber(drawHere.y + drawHere.height);
+			int endLine = getLineNumber(bounds.y + bounds.height);
 
-			if (endLineNumber <= lines - 1) {
-				endLineNumber = endLineNumber + 1;
-			} else {
-				endLineNumber = lines;
+			if (endLine < getLines()) {
+				endLine++;
 			}
 
-			int line = startLineNumber;
+			int line = startLine;
 
-			while (line < endLineNumber) {
+			while (line < endLine) {
 				try {
 					int start = getLineStart(line);
 
 					if (start != -1) {
 						if (isFolded(line + 1)) {
 							drawClosedFold(g, getInsets().left, start + ((lineHeight - ICON_WIDTH) / 2));
-						
-						// TODO: make sure the search for last-fold-line does not continue outside the visible area.  
-						} else if (getLastFoldLine(line) != -1) {
+
+						} else if (getLastFoldLine(line, Math.min(getLineNumber(bounds.y + getVisibleRect().height) + 2, getLines() - 1)) != -1) {
 							drawOpenFold(g, getInsets().left, start + ((lineHeight - ICON_WIDTH) / 2));
 						} else if (line > this.start && line < end) {
 							drawLine(g, getInsets().left, start);
@@ -343,10 +328,10 @@ public abstract class FoldingMargin extends JComponent {
 			fireFoldsUpdated();
 		}
 	}
-	
+
 	private void fireFoldsUpdated() {
 		editor.getDocument().putProperty(Fold.FOLDS_UPDATED_ATTRIBUTE, true);
-		
+
 		editor.revalidate();
 		editor.repaint();
 
@@ -391,7 +376,7 @@ public abstract class FoldingMargin extends JComponent {
 					start = index + 1;
 				} else if (line <= fold.getStart()) {
 					end = index - 1;
-				} else { 
+				} else {
 					return fold;
 				}
 			}
@@ -420,7 +405,7 @@ public abstract class FoldingMargin extends JComponent {
 					start = index + 1;
 				} else if (line <= fold.getStart()) {
 					end = index - 1;
-				} else { 
+				} else {
 					return index;
 				}
 			}
@@ -504,18 +489,47 @@ public abstract class FoldingMargin extends JComponent {
 		return line;
 	}
 
-	protected abstract int getLastFoldLine(int lineNumber);
-	
-	private void drawLine(Graphics g, int x, int y) {
+	private int getLastFoldLine(int start, int limit) {
+		int closing = getFoldClosingLine(start, limit);
+
+		if (closing > start + 1) {
+			return closing;
+		}
+
+		return -1;
+	}
+
+	/**
+	 * Return the closing line of the fold, the first fold should be located on
+	 * the first line.
+	 * 
+	 * If no fold start can be found on the start line, no attempt should be
+	 * taken to find the a fold start in subsequent lines and the start line
+	 * should be returned.
+	 * 
+	 * The closing fold should be located on the line returned however the line
+	 * returned should not be higher than the limit. If the closing fold cannot
+	 * be found before the limit, the limit should be returned.
+	 * 
+	 * @param start
+	 *            the begin line of the fold.
+	 * @param limit
+	 *            the end-line limit after which there is no need to parse the
+	 *            document anymore.
+	 * @return the last line of the fold, not bigger than the end-line limit.
+	 */
+	protected abstract int getFoldClosingLine(int start, int limit);
+
+	protected void drawLine(Graphics g, int x, int y) {
 		g.drawLine(x + 4, y, x + 4, y + getLineHeight());
 	}
 
-	private void drawEnd(Graphics g, int x, int y) {
-		g.drawLine(x + 4, y, x + 4, y + (getLineHeight()/2));
-		g.drawLine(x + 4, y + (getLineHeight()/2), x + 8, y + (getLineHeight()/2));
+	protected void drawEnd(Graphics g, int x, int y) {
+		g.drawLine(x + 4, y, x + 4, y + (getLineHeight() / 2));
+		g.drawLine(x + 4, y + (getLineHeight() / 2), x + 8, y + (getLineHeight() / 2));
 	}
 
-	private static void drawOpenFold(Graphics g, int x, int y) {
+	protected void drawOpenFold(Graphics g, int x, int y) {
 		Polygon polygon = new Polygon();
 		polygon.addPoint(0, 1);
 		polygon.addPoint(8, 1);
@@ -528,7 +542,7 @@ public abstract class FoldingMargin extends JComponent {
 		g.drawLine(x + 2, y + 5, x + 6, y + 5);
 	}
 
-	private static void drawClosedFold(Graphics g, int x, int y) {
+	protected void drawClosedFold(Graphics g, int x, int y) {
 		Polygon polygon = new Polygon();
 		polygon.addPoint(0, 1);
 		polygon.addPoint(8, 1);

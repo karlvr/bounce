@@ -41,8 +41,8 @@ import javax.swing.text.Element;
  * @version $Revision: 1.4 $, $Date: 2008/04/16 19:36:18 $
  */
 class Fold {
-	public static final String FOLD_LIST_ATTRIBUTE = "org.bounce.text.FoldList";
-	public static final String FOLDS_UPDATED_ATTRIBUTE = "org.bounce.text.FoldsUpdated";
+	static final String FOLD_LIST_ATTRIBUTE = "org.bounce.text.FoldList";
+	static final String FOLDS_UPDATED_ATTRIBUTE = "org.bounce.text.FoldsUpdated";
 	
 	private List<Fold> children = null;
 	private int fixedStart = -1;

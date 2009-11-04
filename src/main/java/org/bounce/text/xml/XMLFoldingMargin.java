@@ -66,19 +66,20 @@ public class XMLFoldingMargin extends FoldingMargin {
 		
 	}
 
-	protected int getLastFoldLine(int lineNumber) {
-		Element element = editor.getDocument().getDefaultRootElement().getElement(lineNumber);
+	protected int getFoldClosingLine(int start, int end) {
+		Element element = editor.getDocument().getDefaultRootElement().getElement(start);
 		int tagStart = getStartTagLocation(element.getStartOffset(), element.getEndOffset());
-		int tagEnd = getEndTagLocation(tagStart);
+		
+		if (tagStart != -1) {
+			Element endElement = editor.getDocument().getDefaultRootElement().getElement(end);
+			int tagEnd = getEndTagLocation(tagStart, endElement.getEndOffset());
 
-		if (tagStart >= element.getStartOffset() && tagStart < element.getEndOffset() && tagEnd > element.getEndOffset()) {
-			int endLine = editor.getDocument().getDefaultRootElement().getElementIndex(tagEnd);
-			if (endLine > (lineNumber + 1)) {
-				return endLine;
+			if (tagStart >= element.getStartOffset() && tagStart < element.getEndOffset() && tagEnd > element.getEndOffset()) {
+				return editor.getDocument().getDefaultRootElement().getElementIndex(tagEnd);
 			}
 		}
 		
-		return -1;
+		return start;
 	}
 
 	private int getStartTagLocation(int offset, int end){
@@ -98,9 +99,9 @@ public class XMLFoldingMargin extends FoldingMargin {
 		return -1;
 	}
 
-	private int getEndTagLocation(int startTagLocation) {
+	private int getEndTagLocation(int startTagLocation, int endOffset) {
 		scanner.setValid(false);
-		XMLViewUtilities.updateScanner(scanner, editor.getDocument(), startTagLocation, editor.getDocument().getLength());
+		XMLViewUtilities.updateScanner(scanner, editor.getDocument(), startTagLocation, endOffset);
 
 		int startTags = 1;
 
@@ -115,11 +116,15 @@ public class XMLFoldingMargin extends FoldingMargin {
 
 			if (event == XMLEvent.START_ELEMENT) {
 				startTags++;
-			} else {
+			} else if (event == XMLEvent.END_ELEMENT) {
 				startTags--;
 			}
-		} while (startTags > 0 && scanner.token != null);
+		} while (startTags > 0 && scanner.getEndOffset() < endOffset && scanner.token != null);
 		
-		return scanner.getStartOffset();
+		if (startTags == 0) {
+			return scanner.getStartOffset();
+		}
+		
+		return endOffset;
 	}
 }
