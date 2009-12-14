@@ -88,7 +88,7 @@ public class DocumentInputReader extends Reader {
      * @param end
      *            the end position.
      */
-    public void setRange( int start, int end) {
+    public void setRange( int start, int end) throws IOException {
         stream.setRange( start, end);
 
         pos = 0;
@@ -214,11 +214,12 @@ public class DocumentInputReader extends Reader {
 	        end = document.getLength();
 	        pos = 0;
 
-	        try {
-	            loadSegment();
-	        } catch ( IOException ioe) {
-	            throw new Error( "unexpected: " + ioe);
-	        }
+            try {
+				loadSegment();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	    }
 
 	    /**
@@ -230,15 +231,11 @@ public class DocumentInputReader extends Reader {
 	     * @param end
 	     *            the end of the segment.
 	     */
-	    public void setRange( int start, int end) {
+	    public void setRange( int start, int end) throws IOException {
 	        this.end = end;
 	        pos = start;
 
-	        try {
-	            loadSegment();
-	        } catch ( IOException ioe) {
-	            throw new Error( "unexpected: " + ioe);
-	        }
+            loadSegment();
 	    }
 
 	    /**

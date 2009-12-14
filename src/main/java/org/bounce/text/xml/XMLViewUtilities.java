@@ -64,7 +64,7 @@ class XMLViewUtilities {
 		} catch (IOException e) {
 			// can't adjust scanner... calling logic
 			// will simply render the remaining text.
-			e.printStackTrace();
+			// e.printStackTrace();
 		}
 	}
 
