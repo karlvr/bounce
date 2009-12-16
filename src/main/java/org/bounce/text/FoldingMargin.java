@@ -37,6 +37,8 @@ import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -52,6 +54,7 @@ import javax.swing.event.CaretListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
 import javax.swing.text.Element;
 import javax.swing.text.JTextComponent;
 
@@ -86,31 +89,23 @@ public abstract class FoldingMargin extends JComponent {
 
 		this.setBorder(new CompoundBorder(new MatteBorder(0, 0, 0, 1, UIManager.getColor("controlShadow")), new EmptyBorder(0, 1, 0, 1)));
 
-		editor.getDocument().putProperty(Fold.FOLD_LIST_ATTRIBUTE, new ArrayList<Fold>());
+		editor.addPropertyChangeListener("document", new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent event) {
+				Object prop = event.getNewValue();
+				
+				if (prop instanceof Document) {
+					init((Document)prop);
+				}
+			}
+		});
+
+		init(editor.getDocument());
 
 		setBackground(UIManager.getColor("control")); // editor.getBackground());
 		setForeground(UIManager.getColor("textText"));
 
 		setFont(editor.getFont());
-
-		editor.getDocument().addDocumentListener(new DocumentListener() {
-
-			@Override
-			public void changedUpdate(DocumentEvent documentevent) {
-				updateFolds();
-			}
-
-			@Override
-			public void insertUpdate(DocumentEvent documentevent) {
-				updateFolds();
-			}
-
-			@Override
-			public void removeUpdate(DocumentEvent documentevent) {
-				updateFolds();
-			}
-
-		});
 
 		editor.addCaretListener(new CaretListener() {
 			public void caretUpdate(CaretEvent evt) {
@@ -160,10 +155,32 @@ public abstract class FoldingMargin extends JComponent {
 		});
 	}
 
+	private void init(Document document) {
+		document.putProperty(Fold.FOLD_LIST_ATTRIBUTE, new ArrayList<Fold>());
+		document.addDocumentListener(new DocumentListener() {
+
+			@Override
+			public void changedUpdate(DocumentEvent documentevent) {
+				updateFolds();
+			}
+
+			@Override
+			public void insertUpdate(DocumentEvent documentevent) {
+				updateFolds();
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent documentevent) {
+				updateFolds();
+			}
+
+		});
+	}
+	
 	@SuppressWarnings("unchecked")
 	private List<Fold> getFolds() {
 		List<Fold> folds = (List<Fold>) editor.getDocument().getProperty(Fold.FOLD_LIST_ATTRIBUTE);
-
+		
 		if (folds == null) {
 			folds = Collections.EMPTY_LIST;
 		}

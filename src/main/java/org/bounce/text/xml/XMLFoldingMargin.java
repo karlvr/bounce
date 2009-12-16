@@ -28,8 +28,11 @@
  */
 package org.bounce.text.xml;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.IOException;
 
+import javax.swing.text.Document;
 import javax.swing.text.Element;
 import javax.swing.text.JTextComponent;
 import javax.xml.stream.events.XMLEvent;
@@ -62,8 +65,26 @@ public class XMLFoldingMargin extends FoldingMargin {
 	public XMLFoldingMargin(JTextComponent editor) throws IOException {
 		super(editor);
 
-		scanner = new XMLScanner(editor.getDocument());
+		initScanner(editor.getDocument());
 		
+		editor.addPropertyChangeListener("document", new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent event) {
+				Object prop = event.getNewValue();
+				
+				if (prop instanceof Document) {
+					try {
+						initScanner((Document)prop);
+					} catch (IOException e) {
+						// This will just not set the scanner object 
+					}
+				}
+			}
+		});
+	}
+	
+	private void initScanner(Document document) throws IOException {
+		scanner = new XMLScanner(document);
 	}
 
 	protected int getFoldClosingLine(int start, int end) {
