@@ -4,7 +4,7 @@
   <groupId>edankert.com</groupId>
   <artifactId>bounce</artifactId>
   <packaging>bundle</packaging>
-  <version>0.14</version>
+  <version>0.16</version>
   <name>Bounce</name>
   <url>http://www.edankert.com/bounce</url>
   <description>A set of Java and Swing extensions, including ... layout managers like a FormLayout and CenterLayout, image filters, a comprehensive messaging mechanism, a XMLEditorKit with syntax highlighting and automatic indentation and more.</description>
