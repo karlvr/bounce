@@ -39,6 +39,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.text.PlainDocument;
 
+import org.bounce.com.sun.syndication.io.XmlReader;
 import org.bounce.text.LineNumberMargin;
 import org.bounce.text.ScrollableEditorPanel;
 
@@ -57,10 +58,10 @@ public class XMLKitTest {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		if (args.length != 1) {
-			System.err.println("need filename argument");
-			System.exit(1);
-		}
+//		if (args.length != 1) {
+//			System.err.println("need filename argument");
+//			System.exit(1);
+//		}
 
 		try {
 			editor = new JEditorPane();
@@ -69,8 +70,6 @@ public class XMLKitTest {
 			XMLEditorKit kit = new XMLEditorKit();
 
 			editor.setEditorKit(kit);
-
-			editor.read(XMLKitTest.class.getResourceAsStream("/test.xml"), null);
 
 			// Set the font style.
 			editor.setFont(new Font("Courier", Font.PLAIN, 12));
@@ -96,13 +95,15 @@ public class XMLKitTest {
 
 			JScrollPane scroller = new JScrollPane(editorPanel);
 
-			// Add the number margin as a Row Header View
+			// Add the number margin and folding margin as a Row Header View
 			JPanel rowHeader = new JPanel(new BorderLayout());
 			rowHeader.add(new XMLFoldingMargin(editor), BorderLayout.EAST);
 			rowHeader.add(new LineNumberMargin(editor), BorderLayout.WEST);
 			scroller.setRowHeaderView(rowHeader);
 
-			JFrame f = new JFrame("XmlEditorKitTest: " + args[0]);
+			editor.read(new XmlReader(XMLKitTest.class.getResourceAsStream("/test.xml")), null);
+
+			JFrame f = new JFrame("XmlEditorKitTest: " + "demo");
 			f.getContentPane().setLayout(new BorderLayout());
 			f.getContentPane().add(scroller, BorderLayout.CENTER);
 
