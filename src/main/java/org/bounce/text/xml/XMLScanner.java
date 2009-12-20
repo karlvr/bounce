@@ -180,7 +180,7 @@ public class XMLScanner extends SyntaxHighlightingScanner {
 				tagScanner = TAG_SCANNER;
 				tagScanner.reset();
 
-			} else if (isContent(character)) {
+			} else if (isContent(character) || character == '&') {
 				tagScanner = CONTENT_SCANNER;
 				tagScanner.reset();
 			} else {
