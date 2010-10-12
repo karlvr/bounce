@@ -2192,4 +2192,121 @@ public class XMLScannerTest extends TestCase {
 		assertEquals("end-element", XMLEvent.END_ELEMENT, scanner.getNextTag());
 		assertEquals("end-element", XMLEvent.END_ELEMENT, scanner.getNextTag());
 	}
+	
+	public void testTags() throws BadLocationException, IOException {
+		Content content = new GapContent();
+		content.insertString(0, "<s><t></</s>");
+		PlainDocument doc = new PlainDocument(content);
+		assertEquals("document text", "<s><t></</s>", doc.getText(0, 12));
+		
+		XMLScanner scanner = new XMLScanner(doc);
+
+		assertEquals("token selected", null, scanner.token);
+		assertEquals("unknown", XMLEvent.START_DOCUMENT, scanner.getEventType());
+		assertEquals("start-offset", 0, scanner.getStartOffset());
+		assertEquals("end-offset", 0, scanner.getEndOffset());
+
+		scanner.scan();
+
+		assertEquals("start-offset", 0, scanner.getStartOffset());
+		assertEquals("end-offset", 1, scanner.getEndOffset());
+		assertEquals("scanner-type", XMLEvent.START_ELEMENT, scanner.getEventType());
+		assertEquals("'<' = SPECIAL", XMLStyleConstants.SPECIAL, scanner.token);
+
+		scanner.scan();
+
+		assertEquals("'s' = ELEMENT_NAME", XMLStyleConstants.ELEMENT_NAME, scanner.token);
+		assertEquals("scanner-type", XMLEvent.START_ELEMENT, scanner.getEventType());
+		assertEquals("'test' end-offset", 2, scanner.getEndOffset());
+		assertEquals("'test' start-offset", 1, scanner.getStartOffset());
+
+		scanner.scan();
+
+		assertEquals("'>' = SPECIAL", XMLStyleConstants.SPECIAL, scanner.token);
+		assertEquals("scanner-type", XMLEvent.START_ELEMENT, scanner.getEventType());
+		assertEquals("'>' start-offset", 2, scanner.getStartOffset());
+		assertEquals("'>' end-offset", 3, scanner.getEndOffset());
+
+		scanner.scan();
+
+		assertEquals("start-offset", 3, scanner.getStartOffset());
+		assertEquals("end-offset", 4, scanner.getEndOffset());
+		assertEquals("scanner-type", XMLEvent.START_ELEMENT, scanner.getEventType());
+		assertEquals("'<' = SPECIAL", XMLStyleConstants.SPECIAL, scanner.token);
+
+		scanner.scan();
+
+		assertEquals("'t' = ELEMENT_NAME", XMLStyleConstants.ELEMENT_NAME, scanner.token);
+		assertEquals("scanner-type", XMLEvent.START_ELEMENT, scanner.getEventType());
+		assertEquals("'t' start-offset", 4, scanner.getStartOffset());
+		assertEquals("'t' end-offset", 5, scanner.getEndOffset());
+
+		scanner.scan();
+
+		assertEquals("'>' = SPECIAL", XMLStyleConstants.SPECIAL, scanner.token);
+		assertEquals("scanner-type", XMLEvent.START_ELEMENT, scanner.getEventType());
+		assertEquals("'>' start-offset", 5, scanner.getStartOffset());
+		assertEquals("'>' end-offset", 6, scanner.getEndOffset());
+
+		scanner.scan();
+
+		assertEquals("start-offset", 6, scanner.getStartOffset());
+		assertEquals("end-offset", 8, scanner.getEndOffset());
+		assertEquals("scanner-type", XMLEvent.END_ELEMENT, scanner.getEventType());
+		assertEquals("'</' = SPECIAL", XMLStyleConstants.SPECIAL, scanner.token);
+
+		scanner.scan();
+
+		assertEquals("start-offset", 8, scanner.getStartOffset());
+		assertEquals("end-offset", 10, scanner.getEndOffset());
+		assertEquals("scanner-type", XMLEvent.END_ELEMENT, scanner.getEventType());
+		assertEquals("'</' = SPECIAL", XMLStyleConstants.SPECIAL, scanner.token);
+
+		scanner.scan();
+
+		assertEquals("'s' = ELEMENT_NAME", XMLStyleConstants.ELEMENT_NAME, scanner.token);
+		assertEquals("scanner-type", XMLEvent.END_ELEMENT, scanner.getEventType());
+		assertEquals("'s' start-offset", 10, scanner.getStartOffset());
+		assertEquals("'s' end-offset", 11, scanner.getEndOffset());
+
+		scanner.scan();
+
+		assertEquals("'>' = SPECIAL", XMLStyleConstants.SPECIAL, scanner.token);
+		assertEquals("scanner-type", XMLEvent.END_ELEMENT, scanner.getEventType());
+		assertEquals("'>' start-offset", 11, scanner.getStartOffset());
+		assertEquals("'>' end-offset", 12, scanner.getEndOffset());
+
+		scanner.scan();
+
+		assertEquals("EOF", null, scanner.token);
+		assertEquals("scanner-type", XMLEvent.END_DOCUMENT, scanner.getEventType());
+		assertEquals("'>' start-offset", 12, scanner.getStartOffset());
+		assertEquals("'>' end-offset", 12, scanner.getEndOffset());
+	}
+	
+	public void testDTDTag() throws BadLocationException, IOException {
+		Content content = new GapContent();
+		content.insertString(0, "<?xml version=\"1.0\" encoding=\"utf-8\" ?>" +
+	               "<!DOCTYPE SOAP-ENV:Envelope [<!ELEMENT SOAP-ENV:Envelope ANY>" +
+	               "<!ENTITY xxe0 SYSTEM \"file:///etc/group\">]>" +
+	               "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\"" +
+	               "mlns:SOAP-ENC=\"http://schemas.xmlsoap.org/soap/encoding/\" " +
+	               "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
+	               "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" +
+	               "<SOAP-ENV:Header/>" +
+	               "<SOAP-ENV:Body>" +
+	               "<tns:getEcho>" +
+	               "<echo>&xxe0;</echo>" +
+	               "</tns:getEcho>" +
+	               "</SOAP-ENV:Body>" +
+	               "</SOAP-ENV:Envelope>");
+		PlainDocument doc = new PlainDocument(content);
+		
+		XMLScanner scanner = new XMLScanner(doc);
+		
+		while (scanner.token != null) {
+			scanner.scan();
+		}
+	}
+
 }

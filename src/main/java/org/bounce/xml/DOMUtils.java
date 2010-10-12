@@ -1,14 +1,83 @@
 package org.bounce.xml;
 
 import org.w3c.dom.Attr;
+import org.w3c.dom.Comment;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.w3c.dom.ProcessingInstruction;
 import org.w3c.dom.Text;
 
 public class DOMUtils {
 	public static boolean isWhiteSpace(Text node) {
 		return node.getData().trim().length() == 0;
+	}
+
+	public static String getXPath(Node node) {
+		StringBuilder builder = new StringBuilder();
+		while (node != null) {
+			if (node instanceof Comment) {
+				builder.insert(0, "/comment()");
+			} else if (node instanceof Text) {
+				builder.insert(0, "/text()");
+			} else if (node instanceof ProcessingInstruction) {
+				builder.insert(0, "/processing-instruction()");
+			} else if (node instanceof Element) {
+				builder.insert(0, "/" + getQName((Element) node));
+			} else if (node instanceof Attr) {
+				builder.insert(0, "/@" + getQName((Attr) node));
+			}
+			node = node.getParentNode();
+		}
+
+		return builder.toString();
+	}
+
+	public static String getUniqueXPath(Node node) {
+		StringBuilder builder = new StringBuilder();
+		while (node != null) {
+			if (node instanceof Comment) {
+				builder.insert(0, "/comment()["+getXPathIndex(node)+"]");
+			} else if (node instanceof Text) {
+				builder.insert(0, "/text()["+getXPathIndex(node)+"]");
+			} else if (node instanceof ProcessingInstruction) {
+				builder.insert(0, "/processing-instruction()["+getXPathIndex(node)+"]");
+			} else if (node instanceof Element) {
+				builder.insert(0, "/" + getQName((Element) node)+"["+getXPathIndex(node)+"]");
+			} else if (node instanceof Attr) {
+				builder.insert(0, "/@" + getQName((Attr) node));
+			}
+			node = node.getParentNode();
+		}
+
+		return builder.toString();
+	}
+	
+	private static int getXPathIndex(Node node) {
+		Node parent = node.getParentNode();
+		int index = 1;
+		
+		if (parent != null) {
+			NodeList list = parent.getChildNodes();
+			
+			for (int i = 0; i < list.getLength(); i++) {
+				if (node == list.item(i)) {
+					break;
+				}
+				
+				if (node.getNodeType() == list.item(i).getNodeType()) {
+					if (node.getNodeType() == Node.ELEMENT_NODE) {
+						if (getQName((Element)node).equals(getQName((Element)list.item(i)))) {
+							index++;
+						}
+					} else {
+						index++;
+					}
+				}
+			}
+		}		
+		
+		return index;
 	}
 
 	public static boolean isMixed(Element element) {

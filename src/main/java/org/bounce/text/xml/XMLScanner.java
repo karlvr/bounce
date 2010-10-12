@@ -173,6 +173,8 @@ public class XMLScanner extends SyntaxHighlightingScanner {
 
 				if (getEndOffset() > getStartOffset() || character == -1) {
 					break;
+				} else if (character == '<') {
+					character = in.read();
 				}
 			} else if (character == '<') {
 				character = in.read();

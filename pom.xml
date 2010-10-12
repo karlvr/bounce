@@ -4,7 +4,7 @@
   <groupId>edankert.com</groupId>
   <artifactId>bounce</artifactId>
   <packaging>bundle</packaging>
-  <version>0.17</version>
+  <version>0.18</version>
   <name>Bounce</name>
   <url>http://www.edankert.com/bounce</url>
   <description>A set of Java and Swing extensions, including ... layout managers like a FormLayout and CenterLayout, image filters, a comprehensive messaging mechanism, a XMLEditorKit with syntax highlighting and automatic indentation and more.</description>
@@ -127,6 +127,9 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+        	<header>&lt;a href="http://sourceforge.net/projects/bounce">&lt;img src="http://sflogo.sourceforge.net/sflogo.php?group_id=62201&amp;type=12" width="120" height="30" alt="Get Bounce at SourceForge.net. Fast, secure and Free Open Source software downloads" />&lt;/a></header>
+      	</configuration>
       </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
