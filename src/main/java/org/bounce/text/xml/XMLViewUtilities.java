@@ -78,20 +78,22 @@ class XMLViewUtilities {
 
 				String s = doc.getText(0, p);
 				int cdataStart = s.lastIndexOf("<![CDATA[");
-				int cdataEnd = s.lastIndexOf("]]>");
-				int commentStart = s.lastIndexOf("<!--");
-				int commentEnd = s.lastIndexOf("-->");
 
-				if (cdataStart > 0 && cdataStart > cdataEnd) {
-					index = s.lastIndexOf(">", cdataStart);
-				} else if (commentStart > 0 && commentStart > commentEnd) {
-					index = s.lastIndexOf(">", commentStart);
-				} else {
-					index = s.lastIndexOf(">");
-				}
+				if (cdataStart > 0 && cdataStart > s.lastIndexOf("]]>")) {
+ 					index = s.lastIndexOf(">", cdataStart);
+ 				} else {
+					int commentStart = s.lastIndexOf("<!--");
 
-				if (index != -1)
+					if (commentStart > 0 && commentStart > s.lastIndexOf("-->")) {
+						index = s.lastIndexOf(">", commentStart);
+					} else {
+						index = s.lastIndexOf(">");
+ 					}
+ 				}
+ 				
+				if (index != -1) {
 					elementEnd = index;
+				}
 			} catch (BadLocationException bl) {
 				// empty
 			}

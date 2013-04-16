@@ -1157,6 +1157,10 @@ public class XMLScanner extends SyntaxHighlightingScanner {
 			return true;
 		}
 
+		if (character == ']') {
+			return true;
+		}
+
 		return XMLChar.isSpace(character);
 	}
 }

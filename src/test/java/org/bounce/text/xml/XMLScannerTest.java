@@ -2308,5 +2308,74 @@ public class XMLScannerTest extends TestCase {
 			scanner.scan();
 		}
 	}
+	
+	public void testIllegalAttribute3() throws BadLocationException, IOException {
+		Content content = new GapContent();
+		content.insertString(0, "<test att=\"'test']\">");
+		PlainDocument doc = new PlainDocument(content);
+		
+		XMLScanner scanner = new XMLScanner(doc);
 
+		assertEquals("token selected", null, scanner.token);
+		assertEquals("unknown", XMLEvent.START_DOCUMENT, scanner.getEventType());
+		assertEquals("start-offset", 0, scanner.getStartOffset());
+		assertEquals("end-offset", 0, scanner.getEndOffset());
+
+		scanner.scan();
+
+		assertEquals("start-offset", 0, scanner.getStartOffset());
+		assertEquals("scanner-type", XMLEvent.START_ELEMENT, scanner.getEventType());
+		assertEquals("end-offset", 1, scanner.getEndOffset());
+		assertEquals("'<' = SPECIAL", XMLStyleConstants.SPECIAL, scanner.token);
+
+		scanner.scan();
+
+		assertEquals("test = ELEMENT_NAME", XMLStyleConstants.ELEMENT_NAME, scanner.token);
+		assertEquals("scanner-type", XMLEvent.START_ELEMENT, scanner.getEventType());
+		assertEquals("test end-offset", 5, scanner.getEndOffset());
+		assertEquals("'testa start-offset", 1, scanner.getStartOffset());
+
+		scanner.scan();
+
+		assertEquals("' ' = WHITESPACE", XMLStyleConstants.WHITESPACE, scanner.token);
+		assertEquals("scanner-type", XMLEvent.START_ELEMENT, scanner.getEventType());
+		assertEquals("'att' start-offset", 5, scanner.getStartOffset());
+		assertEquals("'att' end-offset", 6, scanner.getEndOffset());
+
+		scanner.scan();
+
+		assertEquals("'att' = ATTRIBUTE-NAME", XMLStyleConstants.ATTRIBUTE_NAME, scanner.token);
+		assertEquals("scanner-type", XMLEvent.START_ELEMENT, scanner.getEventType());
+		assertEquals("'att' start-offset", 6, scanner.getStartOffset());
+		assertEquals("'att' end-offset", 9, scanner.getEndOffset());
+
+		scanner.scan();
+
+		assertEquals("'=' = SPECIAL", XMLStyleConstants.SPECIAL, scanner.token);
+		assertEquals("scanner-type", XMLEvent.START_ELEMENT, scanner.getEventType());
+		assertEquals("'=' start-offset", 9, scanner.getStartOffset());
+		assertEquals("'=' end-offset", 10, scanner.getEndOffset());
+
+		scanner.scan();
+
+		assertEquals("atesta = ATTRIBUTE_VALUE", XMLStyleConstants.ATTRIBUTE_VALUE, scanner.token);
+		assertEquals("scanner-type", XMLEvent.START_ELEMENT, scanner.getEventType());
+		assertEquals("atesta start-offset", 10, scanner.getStartOffset());
+		assertEquals("wert end-offset", 19, scanner.getEndOffset());
+		assertFalse("error found", scanner.isError());
+
+		scanner.scan();
+
+		assertEquals("'>' = SPECIAL", XMLStyleConstants.SPECIAL, scanner.token);
+		assertEquals("scanner-type", XMLEvent.START_ELEMENT, scanner.getEventType());
+		assertEquals("'>' start-offset", 19, scanner.getStartOffset());
+		assertEquals("'>' end-offset", 20, scanner.getEndOffset());
+
+		scanner.scan();
+
+		assertEquals("EOF", null, scanner.token);
+		assertEquals("scanner-type", XMLEvent.END_DOCUMENT, scanner.getEventType());
+		assertEquals("EOF start-offset", 20, scanner.getStartOffset());
+		assertEquals("EOF end-offset", 20, scanner.getEndOffset());
+	}
 }
