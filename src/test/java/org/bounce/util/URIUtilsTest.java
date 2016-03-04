@@ -158,12 +158,14 @@ public class URIUtilsTest extends TestCase {
         String result = URIUtils.getRelativePath(base, new File("/temp/test/sub/test.tst"));
         assertEquals("sub/test.tst", result);
 
-        result = URIUtils.getRelativePath(base, new File("\\temp\\test\\sub\\test.tst"));
-        assertEquals("sub/test.tst", result);
-
-        result = URIUtils.getRelativePath(base, new File("\\temp\\sub\\test.tst"));
-        assertEquals("../sub/test.tst", result);
-
+        if (File.separatorChar == '\\') {
+            result = URIUtils.getRelativePath(base, new File("\\temp\\test\\sub\\test.tst"));
+            assertEquals("sub/test.tst", result);
+    
+            result = URIUtils.getRelativePath(base, new File("\\temp\\sub\\test.tst"));
+            assertEquals("../sub/test.tst", result);
+        }
+        
         result = URIUtils.getRelativePath(base, new File("/temp/sub/test.tst"));
         assertEquals("../sub/test.tst", result);
 
@@ -183,8 +185,10 @@ public class URIUtilsTest extends TestCase {
         result = URIUtils.getRelativePath(base, new File("/temp/test/sub/test.tst"));
         assertEquals("sub/test.tst", result);
 
-        result = URIUtils.getRelativePath(base, new File("\\temp\\test\\sub\\test.tst"));
-        assertEquals("sub/test.tst", result);
+        if (File.separatorChar == '\\') {
+            result = URIUtils.getRelativePath(base, new File("\\temp\\test\\sub\\test.tst"));
+            assertEquals("sub/test.tst", result);
+        }
 
         result = URIUtils.getRelativePath(base, new File("/test/sub/test.tst"));
 
