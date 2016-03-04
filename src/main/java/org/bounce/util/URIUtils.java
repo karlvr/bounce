@@ -38,7 +38,7 @@ import java.util.StringTokenizer;
  * Put comment...
  * 
  * @version $Revision$, $Date$
- * @author Edwin Dankert <edankert@gmail.com>
+ * @author Edwin Dankert (edankert@gmail.com)
  */
 
 public class URIUtils {

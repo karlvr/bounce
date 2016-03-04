@@ -42,7 +42,7 @@ import javax.swing.text.Document;
  * </p>
  * 
  * @version $Revision: 1.5 $, $Date: 2009/01/22 22:14:59 $
- * @author Edwin Dankert <edankert@gmail.com>
+ * @author Edwin Dankert (edankert@gmail.com)
  */
 public abstract class SyntaxHighlightingScanner {
 	protected int start = 0;
@@ -61,7 +61,7 @@ public abstract class SyntaxHighlightingScanner {
 	 * @param document
 	 *            the document containing the XML content.
 	 * 
-	 * @throws IOException
+	 * @throws IOException if the document cannot be opened
 	 */
 	public SyntaxHighlightingScanner(Document document) throws IOException {
 		try {
@@ -104,7 +104,7 @@ public abstract class SyntaxHighlightingScanner {
 	 * @param end
 	 *            the end of the range.
 	 * 
-	 * @throws IOException
+	 * @throws IOException if an IO error occurs
 	 */
 	public void setRange(int start, int end) throws IOException {
 		in.setRange(start, end);
@@ -141,7 +141,7 @@ public abstract class SyntaxHighlightingScanner {
 	 * 
 	 * @return the last location.
 	 * 
-	 * @throws IOException
+	 * @throws IOException if an IO error occurs
 	 */
 	public abstract long scan() throws IOException;
 }

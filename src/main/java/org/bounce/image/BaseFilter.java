@@ -36,7 +36,7 @@ import java.awt.image.RGBImageFilter;
  * Contains a couple of handy Utility methods.
  *
  * @version	$Revision: 1.4 $, $Date: 2008/01/28 21:28:37 $
- * @author Edwin Dankert <edankert@gmail.com>
+ * @author Edwin Dankert (edankert@gmail.com)
  */
 public abstract class BaseFilter extends RGBImageFilter {
 

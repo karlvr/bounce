@@ -53,7 +53,7 @@ import org.bounce.QLabel;
  * label. 
  *
  * @version	$Revision: 1.6 $, $Date: 2008/01/28 21:28:37 $
- * @author Edwin Dankert <edankert@gmail.com>
+ * @author Edwin Dankert (edankert@gmail.com)
  */
 public class BounceLabelUI extends BasicLabelUI {
 	private static Rectangle paintIconR = new Rectangle();

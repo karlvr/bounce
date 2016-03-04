@@ -46,10 +46,10 @@ import javax.swing.SwingConstants;
   *
   * Note: This implementation is based on the CompositeIcon 
   * Version 1.00 Aug 15 2001, implementation by Eric Schultz:
-  * http://forum.java.sun.com/thread.jsp?forum=57&thread=157029
+  * http://forum.java.sun.com/thread.jsp?forum=57&amp;thread=157029
   *
   * @version	$Revision: 1.6 $, $Date: 2008/01/28 21:28:37 $
-  * @author Edwin Dankert <edankert@gmail.com>
+  * @author Edwin Dankert (edankert@gmail.com)
   */
 public class QIcon implements Icon {
 	/** The overlay icon location NORTH */

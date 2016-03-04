@@ -36,7 +36,7 @@ package org.bounce.image;
  * the image needs to be made brighter, use the BrighterFilter.
  *
  * @version	$Revision: 1.4 $, $Date: 2008/01/28 21:28:37 $
- * @author Edwin Dankert <edankert@gmail.com>
+ * @author Edwin Dankert (edankert@gmail.com)
  */
 public class GrayFilter extends BaseFilter {
 	private int percent;

@@ -35,7 +35,7 @@ import org.w3c.dom.Comment;
 /**
  * The node for the XML viewer, containing an XML comment.
  *
- * @author Edwin Dankert <edankert@gmail.com>
+ * @author Edwin Dankert (edankert@gmail.com)
  */
 class CommentTreeNode extends NodeTreeNode {
 	private static final long serialVersionUID = -4889203266456300300L;

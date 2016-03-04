@@ -48,7 +48,7 @@ import javax.swing.ImageIcon;
  * A class with utility methods for the images.
  * 
  * @version $Revision: 1.5 $, $Date: 2008/01/28 21:28:37 $
- * @author Edwin Dankert <edankert@gmail.com>
+ * @author Edwin Dankert (edankert@gmail.com)
  */
 public class ImageUtilities {
 	private static final boolean DEBUG = false;

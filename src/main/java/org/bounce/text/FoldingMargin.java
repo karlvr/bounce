@@ -62,7 +62,7 @@ import javax.swing.text.JTextComponent;
  * Base folding margin for a JTextComponent. Just implement the
  * getLastFoldLine() method.
  * 
- * @author Edwin Dankert <edankert@gmail.com>
+ * @author Edwin Dankert (edankert@gmail.com)
  */
 
 public abstract class FoldingMargin extends JComponent {

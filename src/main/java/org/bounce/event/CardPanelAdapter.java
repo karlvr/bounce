@@ -33,7 +33,7 @@ import javax.swing.JComponent;
 
 /**
  * @version $Revision$, $Date$
- * @author Edwin Dankert <edankert@gmail.com>
+ * @author Edwin Dankert (edankert@gmail.com)
  */
 public class CardPanelAdapter<C extends JComponent> implements CardPanelListener<C> {
 

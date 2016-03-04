@@ -43,7 +43,7 @@ import org.bounce.LinkButton;
  * LinkButtonUI implementation.
  *
  * @version	$Revision: 1.5 $, $Date: 2008/01/28 21:28:37 $
- * @author Edwin Dankert <edankert@gmail.com>
+ * @author Edwin Dankert (edankert@gmail.com)
  */
 public class LinkButtonUI extends BounceButtonUI {
 

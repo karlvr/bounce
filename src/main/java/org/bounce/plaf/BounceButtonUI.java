@@ -61,7 +61,7 @@ import org.bounce.QButton;
  * BounceButtonUI implementation.
  *
  * @version	$Revision: 1.4 $, $Date: 2008/01/28 21:28:37 $
- * @author Edwin Dankert <edankert@gmail.com>
+ * @author Edwin Dankert (edankert@gmail.com)
  */
 public class BounceButtonUI extends BasicButtonUI {
 
@@ -345,7 +345,7 @@ public class BounceButtonUI extends BasicButtonUI {
 	 * full width of the text as the preferred width and the full height of the
 	 * lines as the height.
      * <p>
-     * This method is a revamped version of the method:<br/>
+     * This method is a revamped version of the method:<br>
      * BasicButtonUI.getPreferredSize()
      * </p>
 	 *

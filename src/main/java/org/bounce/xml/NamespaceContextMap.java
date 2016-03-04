@@ -41,7 +41,7 @@ import javax.xml.namespace.NamespaceContext;
  * Implementation of the a Namespace Context as a HashMap.
  * 
  * @version $Revision: 1.1 $, $Date: 2008/05/20 20:19:20 $
- * @author Edwin Dankert <edankert@gmail.com>
+ * @author Edwin Dankert (edankert@gmail.com)
  */
 
 public class NamespaceContextMap extends HashMap<String,String> implements NamespaceContext {

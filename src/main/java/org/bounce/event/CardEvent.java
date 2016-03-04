@@ -40,7 +40,8 @@ public class CardEvent<T extends JComponent> extends EventObject {
     private T card = null;
     
     /**
-     * @param source
+     * @param source the source of the event
+     * @param card the card
      */
     public CardEvent(CardPanel source, T card) {
         super(source);

@@ -47,7 +47,7 @@ import javax.swing.text.WrappedPlainView;
  * Takes Block Increment and Unit Increment info from editor.
  * 
  * @version $Revision: 1.2 $, $Date: 2008/01/28 21:02:18 $
- * @author Edwin Dankert <edankert@gmail.com>
+ * @author Edwin Dankert (edankert@gmail.com)
  */
 public class ScrollableEditorPanel extends JPanel implements Scrollable {
         private static final long serialVersionUID = 3978147659863437620L;

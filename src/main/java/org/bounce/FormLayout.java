@@ -40,7 +40,7 @@ import java.util.HashMap;
 /**
  * A Layout manager that can be used to layout 2 columns of components.
  * The alignment and fill type of the columns can be set by using the 
- * FormConstraint class.<br/>
+ * FormConstraint class.<br>
  * A couple of predefined FormConstraint objects have been defined:
  * <ul>
  * <li>LEFT, Places the component in the left column of the form. 
@@ -53,15 +53,15 @@ import java.util.HashMap;
  * to fill the whole width of the row.
  * </ul>
  *
- * Notes:<br/>
+ * Notes:<br>
  * - Alignment of components that fill the height or width completely already will
  *   not result in a visible change. Ie. the full positioned component will never
- *   react to a Vertical alignment setting.<br/>
- * - The fill method will only change the horizontal appearance.<br/>
- * - Components that are bigger than the available width/height will be LEFT aligned.<br/>
+ *   react to a Vertical alignment setting.<br>
+ * - The fill method will only change the horizontal appearance.<br>
+ * - Components that are bigger than the available width/height will be LEFT aligned.<br>
  *
  * @version	$Revision: 1.5 $, $Date: 2008/01/28 21:28:37 $
- * @author Edwin Dankert <edankert@gmail.com>
+ * @author Edwin Dankert (edankert@gmail.com)
  */
 public class FormLayout implements LayoutManager2 {
 	private static final int MINIMUM	= 0;

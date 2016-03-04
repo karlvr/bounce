@@ -40,7 +40,7 @@ package org.bounce.text.xml;
  * </p>
  * 
  * @version $Revision: 1.3 $, $Date: 2009/01/22 22:14:59 $
- * @author Edwin Dankert <edankert@gmail.com>
+ * @author Edwin Dankert (edankert@gmail.com)
  */
 public interface XMLStyleConstants {
     /** The style constant for element name */

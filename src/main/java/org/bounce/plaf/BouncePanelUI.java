@@ -52,7 +52,7 @@ import org.bounce.QPanel;
  * background, for a very subtle 3D effect.
  *
  * @version	$Revision: 1.5 $, $Date: 2008/01/28 21:28:37 $
- * @author Edwin Dankert <edankert@gmail.com>
+ * @author Edwin Dankert (edankert@gmail.com)
  */
 public class BouncePanelUI extends BasicPanelUI {
 	private static final String PREVIOUS_GRADIENT_IMAGE_KEY = "BouncePanelUI.previousGradientImage";

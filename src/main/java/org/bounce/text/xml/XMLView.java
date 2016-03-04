@@ -48,7 +48,7 @@ import org.bounce.text.SyntaxHighlightingView;
  * http://java.sun.com/products/jfc/tsc/articles/text/editor_kit/
  * </p>
  * 
- * @author Edwin Dankert <edankert@gmail.com>
+ * @author Edwin Dankert (edankert@gmail.com)
  * @version $Revision: 1.4 $, $Date: 2008/04/16 19:36:18 $
  */
 public class XMLView extends SyntaxHighlightingView {
@@ -56,6 +56,7 @@ public class XMLView extends SyntaxHighlightingView {
 	 * Construct a colorized view of xml text for the element. Gets the current
 	 * document and creates a new Scanner object.
 	 * 
+	 * @param scanner the scanner
 	 * @param context
 	 *            the styles used to colorize the view.
 	 * @param elem

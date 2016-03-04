@@ -41,7 +41,7 @@ import javax.swing.tree.DefaultTreeCellRenderer;
  * The cell renderer for a XmlElementNode.
  *
  * @version	$Revision$, $Date$
- * @author Edwin Dankert <edankert@gmail.com>
+ * @author Edwin Dankert (edankert@gmail.com)
  */
 public class PreferencesPageCellRenderer extends DefaultTreeCellRenderer {
 	private static final long serialVersionUID = -1320645592895770122L;

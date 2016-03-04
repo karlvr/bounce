@@ -35,9 +35,9 @@ import java.io.Serializable;
 
 /**
  * Three state check box enhancement
- *
- * @date: 14.11.2007
- * @author Edwin Dankert <edankert@gmail.com>, Evgeniy Smelik <sever@yandex.ru>
+ * 
+ * Date: 14.11.2007
+ * @author Edwin Dankert (edankert@gmail.com), Evgeniy Smelik (sever@yandex.ru)
  */
 public class ThreeStateCheckBox2 extends JCheckBox {
     private static final long serialVersionUID = -1842373249474550802L;

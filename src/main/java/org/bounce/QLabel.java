@@ -39,7 +39,7 @@ import org.bounce.plaf.BounceLabelUI;
  * lines.
  *
  * @version	$Revision: 1.6 $, $Date: 2008/01/28 21:28:37 $
- * @author Edwin Dankert <edankert@gmail.com>
+ * @author Edwin Dankert (edankert@gmail.com)
  */
 public class QLabel extends JLabel {
 	private static final long serialVersionUID = 3978422533542130994L;

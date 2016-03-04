@@ -46,7 +46,7 @@ import org.bounce.text.SyntaxHighlightingScanner;
  * http://java.sun.com/products/jfc/tsc/articles/text/editor_kit/
  * </p>
  * 
- * @author Edwin Dankert <edankert@gmail.com>
+ * @author Edwin Dankert (edankert@gmail.com)
  * @version $Revision: 1.5 $, $Date: 2009/01/22 22:14:59 $
  */
 class XMLViewUtilities {

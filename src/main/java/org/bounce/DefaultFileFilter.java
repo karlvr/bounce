@@ -40,7 +40,7 @@ import javax.swing.filechooser.FileFilter;
  * and a file-type extension.
  *
  * @version	$Revision: 1.6 $, $Date: 2008/01/28 21:28:37 $
- * @author Edwin Dankert <edankert@gmail.com>
+ * @author Edwin Dankert (edankert@gmail.com)
  */
 public class DefaultFileFilter extends FileFilter {
 
@@ -86,7 +86,7 @@ public class DefaultFileFilter extends FileFilter {
 	}
 
 	/**
-	 * @inheritDoc javax.swing.filechooser.FileFilter#accept();
+	 * {@inheritDoc}
 	 */
     public boolean accept( File file) {
 		boolean result = false;
@@ -108,7 +108,7 @@ public class DefaultFileFilter extends FileFilter {
     }
 
 	/**
-	 * @inheritDoc javax.swing.filechooser.FileFilter#getDescription();
+	 * {@inheritDoc}
 	 */
      public String getDescription() {
 		StringBuffer result = new StringBuffer( description);

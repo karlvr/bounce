@@ -39,7 +39,7 @@ import javax.swing.Icon;
  * Dummy Item, which does not perform any painting.
  * 
  * @version $Revision$, $Date$
- * @author Edwin Dankert <edankert@gmail.com>
+ * @author Edwin Dankert (edankert@gmail.com)
  */
 
 public class DummyIcon implements Icon {

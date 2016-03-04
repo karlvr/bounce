@@ -41,7 +41,7 @@ import javax.swing.JViewport;
  * Handles the lay out of the components on the Desktop...
  *
  * @version	$Revision$, $Date$
- * @author Edwin Dankert <edankert@gmail.com>
+ * @author Edwin Dankert (edankert@gmail.com)
  */
 public class ResizingFlowLayout extends FlowLayout {
 	

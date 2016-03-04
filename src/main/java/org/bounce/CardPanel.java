@@ -47,7 +47,7 @@ import org.bounce.event.CardPanelListener;
  * @param <C> the type of panels this can contain.
  * 
  * @version $Revision$, $Date$
- * @author Edwin Dankert <edankert@gmail.com>
+ * @author Edwin Dankert (edankert@gmail.com)
  */
 public class CardPanel<C extends JComponent> extends JPanel {
 	private static final long serialVersionUID = 3258135768999737650L;

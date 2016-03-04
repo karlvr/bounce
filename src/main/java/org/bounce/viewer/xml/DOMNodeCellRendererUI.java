@@ -43,7 +43,7 @@ import javax.swing.plaf.metal.MetalLabelUI;
 /**
  * Renderers the XML information in the Element Node.
  *
- * @author Edwin Dankert <edankert@gmail.com>
+ * @author Edwin Dankert (edankert@gmail.com)
  */
 public class DOMNodeCellRendererUI extends MetalLabelUI {
     protected static DOMNodeCellRendererUI labelUI = new DOMNodeCellRendererUI();
@@ -56,6 +56,11 @@ public class DOMNodeCellRendererUI extends MetalLabelUI {
 
     /**
      * Paint clippedText at textX, textY with the labels foreground color.
+     * @param l the label
+     * @param g the Graphics
+     * @param line the line
+     * @param x x coord
+     * @param y y coord
      */
     protected void paintLine(JLabel l, Graphics g, Line line, int x, int y) {
 		List<StyledString> strings = line.getStyledStrings();

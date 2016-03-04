@@ -60,7 +60,7 @@ import javax.swing.text.JTextComponent;
  * scroller.setRowHeaderView(margin);
  * </pre>
  * 
- * @author Edwin Dankert <edankert@gmail.com>
+ * @author Edwin Dankert (edankert@gmail.com)
  */
 public class LineNumberMargin extends JComponent {
 	private static final long serialVersionUID = 1421386204383391804L;
@@ -73,6 +73,7 @@ public class LineNumberMargin extends JComponent {
 
 	/**
 	 * Convenience constructor for Text Components
+	 * @param editor the text component
 	 */
 	public LineNumberMargin(JTextComponent editor) {
 		this.editor = editor;

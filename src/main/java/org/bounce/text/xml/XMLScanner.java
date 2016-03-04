@@ -47,7 +47,7 @@ import org.bounce.xml.XMLChar;
  * </p>
  * 
  * @version $Revision: 1.5 $, $Date: 2009/01/22 22:14:59 $
- * @author Edwin Dankert <edankert@gmail.com>
+ * @author Edwin Dankert (edankert@gmail.com)
  */
 public class XMLScanner extends SyntaxHighlightingScanner {
 	private Scanner tagScanner = null;
@@ -74,7 +74,7 @@ public class XMLScanner extends SyntaxHighlightingScanner {
 	 * @param document
 	 *            the document containing the XML content.
 	 * 
-	 * @throws IOException
+	 * @throws IOException if the document cannot be opened
 	 */
 	public XMLScanner(Document document) throws IOException {
 		super(document);
@@ -132,7 +132,7 @@ public class XMLScanner extends SyntaxHighlightingScanner {
 	 * @param end
 	 *            the end of the range.
 	 * 
-	 * @throws IOException
+	 * @throws IOException if an IO error occurs
 	 */
 	public void setRange(int start, int end) throws IOException {
 		tagScanner = null;
@@ -145,7 +145,7 @@ public class XMLScanner extends SyntaxHighlightingScanner {
 	 * 
 	 * @return the last location.
 	 * 
-	 * @throws IOException
+	 * @throws IOException if an IO error occurs
 	 */
 	public long scan() throws IOException {
 		int character = in.getLastChar();

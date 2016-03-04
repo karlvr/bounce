@@ -40,7 +40,7 @@ import javax.swing.tree.TreeCellRenderer;
 /**
  * The cell renderer for a XmlElementNode.
  *
- * @author Edwin Dankert <edankert@gmail.com>
+ * @author Edwin Dankert (edankert@gmail.com)
  */
 public class DOMNodeCellRenderer extends JLabel implements TreeCellRenderer {
 	private static final long serialVersionUID = -3943270917800439561L;

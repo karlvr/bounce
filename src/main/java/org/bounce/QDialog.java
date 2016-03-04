@@ -46,7 +46,7 @@ import javax.swing.KeyStroke;
  * TODO Move to bounce package.
  * 
  * @version $Revision$, $Date$
- * @author Edwin Dankert <edankert@gmail.com>
+ * @author Edwin Dankert (edankert@gmail.com)
  */
 public class QDialog extends JDialog {
     private static final long serialVersionUID = 7919182113007451993L;

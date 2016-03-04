@@ -36,7 +36,7 @@ import java.util.*;
  * publisher for the Message class.
  *
  * @version	$Revision: 1.5 $, $Date: 2008/01/28 21:28:37 $
- * @author Edwin Dankert <edankert@gmail.com>
+ * @author Edwin Dankert (edankert@gmail.com)
  **/
 public class DefaultPublisher implements Publisher {
 	private List<Subscriber> subscribers = null;

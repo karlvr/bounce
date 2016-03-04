@@ -61,13 +61,13 @@ public class FoldingPlainView extends PlainView {
 	 * that the way selected and unselected text are rendered can be customized.
 	 * 
 	 * @param lineIndex
-	 *            the line to draw >= 0
+	 *            the line to draw &gt;= 0
 	 * @param g
 	 *            the <code>Graphics</code> context
 	 * @param x
-	 *            the starting X position >= 0
+	 *            the starting X position &gt;= 0
 	 * @param y
-	 *            the starting Y position >= 0
+	 *            the starting Y position &gt;= 0
 	 * @see #drawUnselectedText
 	 * @see #drawSelectedText
 	 */
@@ -99,7 +99,7 @@ public class FoldingPlainView extends PlainView {
 	 * allow access to some of the locations in the model.
 	 * 
 	 * @param pos
-	 *            the position to convert >= 0
+	 *            the position to convert &gt;= 0
 	 * @param a
 	 *            the allocated region in which to render
 	 * @param direction
@@ -252,14 +252,14 @@ public class FoldingPlainView extends PlainView {
 	 * @param g
 	 *            the graphics context
 	 * @param x
-	 *            the starting X coordinate >= 0
+	 *            the starting X coordinate &gt;= 0
 	 * @param y
-	 *            the starting Y coordinate >= 0
+	 *            the starting Y coordinate &gt;= 0
 	 * @param p0
-	 *            the beginning position in the model >= 0
+	 *            the beginning position in the model &gt;= 0
 	 * @param p1
-	 *            the ending position in the model >= 0
-	 * @return the X location of the end of the range >= 0
+	 *            the ending position in the model &gt;= 0
+	 * @return the X location of the end of the range &gt;= 0
 	 * @exception BadLocationException
 	 *                if the range is invalid
 	 */
@@ -282,13 +282,13 @@ public class FoldingPlainView extends PlainView {
 	 * @param g
 	 *            the graphics context
 	 * @param x
-	 *            the starting X coordinate >= 0
+	 *            the starting X coordinate &gt;= 0
 	 * @param y
-	 *            the starting Y coordinate >= 0
+	 *            the starting Y coordinate &gt;= 0
 	 * @param p0
-	 *            the beginning position in the model >= 0
+	 *            the beginning position in the model &gt;= 0
 	 * @param p1
-	 *            the ending position in the model >= 0
+	 *            the ending position in the model &gt;= 0
 	 * @return the location of the end of the range
 	 * @exception BadLocationException
 	 *                if the range is invalid
@@ -345,7 +345,7 @@ public class FoldingPlainView extends PlainView {
 	 * 
 	 * @param axis
 	 *            may be either View.X_AXIS or View.Y_AXIS
-	 * @return the span the view would like to be rendered into >= 0. Typically
+	 * @return the span the view would like to be rendered into &gt;= 0. Typically
 	 *         the view is told to render into the span that is returned,
 	 *         although there is no guarantee. The parent may choose to resize
 	 *         or break the view.
@@ -487,7 +487,7 @@ public class FoldingPlainView extends PlainView {
 	 * coordinate space of the view mapped to it.
 	 * 
 	 * @param pos
-	 *            the position to convert >= 0
+	 *            the position to convert &gt;= 0
 	 * @param a
 	 *            the allocated region to render into
 	 * @return the bounding box of the given position
@@ -546,13 +546,13 @@ public class FoldingPlainView extends PlainView {
 	 * coordinate space of the model.
 	 * 
 	 * @param fx
-	 *            the X coordinate >= 0
+	 *            the X coordinate &gt;= 0
 	 * @param fy
-	 *            the Y coordinate >= 0
+	 *            the Y coordinate &gt;= 0
 	 * @param a
 	 *            the allocated region to render into
 	 * @return the location within the model that best represents the given
-	 *         point in the view >= 0
+	 *         point in the view &gt;= 0
 	 * @see View#viewToModel
 	 */
 	public int viewToModel(float fx, float fy, Shape a, Position.Bias[] bias) {
@@ -713,9 +713,9 @@ public class FoldingPlainView extends PlainView {
 	 * given axis, if it has any layout duties.
 	 * 
 	 * @param width
-	 *            the width >= 0
+	 *            the width &gt;= 0
 	 * @param height
-	 *            the height >= 0
+	 *            the height &gt;= 0
 	 */
 	public void setSize(float width, float height) {
 		super.setSize(width, height);
@@ -730,11 +730,11 @@ public class FoldingPlainView extends PlainView {
 	 * tabOffset argument.
 	 * 
 	 * @param x
-	 *            the current position >= 0
+	 *            the current position &gt;= 0
 	 * @param tabOffset
-	 *            the position within the text stream that the tab occurred at >=
+	 *            the position within the text stream that the tab occurred at &gt;=
 	 *            0.
-	 * @return the tab stop, measured in points >= 0
+	 * @return the tab stop, measured in points &gt;= 0
 	 */
 	public float nextTabStop(float x, int tabOffset) {
 		if (tabSize == 0) {
@@ -965,8 +965,8 @@ public class FoldingPlainView extends PlainView {
 	 * @param c
 	 *            the editor
 	 * @param offs
-	 *            the offset in the document >= 0
-	 * @return the position >= 0 if the request can be computed, otherwise a
+	 *            the offset in the document &gt;= 0
+	 * @return the position &gt;= 0 if the request can be computed, otherwise a
 	 *         value of -1 will be returned.
 	 * @exception BadLocationException
 	 *                if the offset is out of range
@@ -1027,8 +1027,8 @@ public class FoldingPlainView extends PlainView {
 	 * @param c
 	 *            the editor
 	 * @param offs
-	 *            the offset in the document >= 0
-	 * @return the position >= 0 if the request can be computed, otherwise a
+	 *            the offset in the document &gt;= 0
+	 * @return the position &gt;= 0 if the request can be computed, otherwise a
 	 *         value of -1 will be returned.
 	 * @exception BadLocationException
 	 *                if the offset is out of range
@@ -1102,10 +1102,10 @@ public class FoldingPlainView extends PlainView {
 	 * @param c
 	 *            the editor
 	 * @param offs
-	 *            the offset in the document >= 0
+	 *            the offset in the document &gt;= 0
 	 * @param x
-	 *            the X coordinate >= 0
-	 * @return the position >= 0 if the request can be computed, otherwise a
+	 *            the X coordinate &gt;= 0
+	 * @return the position &gt;= 0 if the request can be computed, otherwise a
 	 *         value of -1 will be returned.
 	 * @exception BadLocationException
 	 *                if the offset is out of range
@@ -1150,10 +1150,10 @@ public class FoldingPlainView extends PlainView {
 	 * @param c
 	 *            the editor
 	 * @param offs
-	 *            the offset in the document >= 0
+	 *            the offset in the document &gt;= 0
 	 * @param x
-	 *            the X coordinate >= 0
-	 * @return the position >= 0 if the request can be computed, otherwise a
+	 *            the X coordinate &gt;= 0
+	 * @return the position &gt;= 0 if the request can be computed, otherwise a
 	 *         value of -1 will be returned.
 	 * @exception BadLocationException
 	 *                if the offset is out of range

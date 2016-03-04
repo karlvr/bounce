@@ -43,7 +43,7 @@ import javax.swing.tree.TreePath;
 /**
  * The View part for the Xml Tree component.
  *
- * @author Edwin Dankert <edankert@gmail.com>
+ * @author Edwin Dankert (edankert@gmail.com)
  */
 public class DOMNodeTreeUI extends MetalTreeUI {
 

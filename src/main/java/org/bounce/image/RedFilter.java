@@ -33,7 +33,7 @@ package org.bounce.image;
  * A filter to create a 'red scale' image.
  *
  * @version	$Revision: 1.4 $, $Date: 2008/01/28 21:28:37 $
- * @author Edwin Dankert <edankert@gmail.com>
+ * @author Edwin Dankert (edankert@gmail.com)
  */
 public class RedFilter extends BaseFilter {
 	private int percent;

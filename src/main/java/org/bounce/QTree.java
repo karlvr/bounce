@@ -45,7 +45,7 @@ import javax.swing.JTree;
  * Extend the JTree class, this tree allows for:
  *
  * @version	$Revision: 1.6 $, $Date: 2008/01/28 21:28:37 $
- * @author Edwin Dankert <edankert@gmail.com>
+ * @author Edwin Dankert (edankert@gmail.com)
  */
 public class QTree extends JTree {
 	private static final long serialVersionUID = 3832618482620839223L;

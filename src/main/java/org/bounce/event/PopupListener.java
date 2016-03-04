@@ -36,7 +36,7 @@ import java.awt.event.MouseAdapter;
  * A MouseListener that informs about events that trigger a popup.
  *
  * @version	$Revision: 1.4 $, $Date: 2008/01/28 21:28:37 $
- * @author Edwin Dankert <edankert@gmail.com>
+ * @author Edwin Dankert (edankert@gmail.com)
  */
 public abstract class PopupListener extends MouseAdapter {
 	/**
@@ -47,7 +47,7 @@ public abstract class PopupListener extends MouseAdapter {
 	public abstract void popupTriggered( MouseEvent e);
 	
 	/**
-	 * @inheritDoc java.awt.event.MouseAdapter
+	 * {@inheritDoc}
 	 */ 
 	public void mouseClicked( MouseEvent e) {
 		if ( e.isPopupTrigger()) {
@@ -56,7 +56,7 @@ public abstract class PopupListener extends MouseAdapter {
 	}
 
 	/**
-	 * @inheritDoc java.awt.event.MouseAdapter
+	 * {@inheritDoc}
 	 */ 
 	public void mousePressed( MouseEvent e) {
 		if ( e.isPopupTrigger()) {
@@ -65,7 +65,7 @@ public abstract class PopupListener extends MouseAdapter {
 	}
 	
 	/**
-	 * @inheritDoc java.awt.event.MouseAdapter
+	 * {@inheritDoc}
 	 */ 
 	public void mouseReleased( MouseEvent e) {
 		if ( e.isPopupTrigger()) {

@@ -35,7 +35,7 @@ import java.util.List;
 /**
  * Represents a line on the tree.
  *
- * @author Edwin Dankert <edankert@gmail.com>
+ * @author Edwin Dankert (edankert@gmail.com)
  */
 class Line {
 	private List<StyledString> strings = null;

@@ -56,7 +56,7 @@ import org.bounce.QDialog;
  * Preferences Dialog framework ...
  * 
  * @version $Revision$, $Date$
- * @author Edwin Dankert <edankert@gmail.com>
+ * @author Edwin Dankert (edankert@gmail.com)
  */
 
 public abstract class PreferencesDialog extends QDialog implements TreeSelectionListener {

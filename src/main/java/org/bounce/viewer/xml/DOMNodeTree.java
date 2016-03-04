@@ -43,7 +43,7 @@ import org.w3c.dom.Node;
 /**
  * A tree representing DOM Nodes.
  *
- * @author Edwin Dankert <edankert@gmail.com>
+ * @author Edwin Dankert (edankert@gmail.com)
  */
 public class DOMNodeTree extends QTree {
 	private static final long serialVersionUID = 5210155085492412876L;

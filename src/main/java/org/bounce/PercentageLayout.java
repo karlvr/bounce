@@ -42,14 +42,14 @@ import javax.swing.SwingConstants;
  * A Layout manager that can be used to layout components horizontally or
  * vertically. Every component will be resized relative to the value
  * supplied as a constraint. All the Integer values will be added together 
- * and will be seen as 100% so if the next two components are added:<br/>
- * <code>add( component1, new Integer( 150)); </code><br/>
- * <code>add( component2, new Integer( 50)); </code><br/>
+ * and will be seen as 100% so if the next two components are added:<br>
+ * <code>add( component1, new Integer( 150)); </code><br>
+ * <code>add( component2, new Integer( 50)); </code><br>
  * In this case 'component1' will occupy 75% of the panel and 'component2' 
  * will occupy 25% of the panel.
  *
  * @version	$Revision: 1.5 $, $Date: 2008/01/28 21:28:37 $
- * @author Edwin Dankert <edankert@gmail.com>
+ * @author Edwin Dankert (edankert@gmail.com)
  */
 public class PercentageLayout implements LayoutManager2 {
     /** Sets the layout orientation to horizontal. */

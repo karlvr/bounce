@@ -60,7 +60,7 @@ import javax.swing.text.View;
  * http://java.sun.com/products/jfc/tsc/articles/text/editor_kit/
  * </p>
  * 
- * @author Edwin Dankert <edankert@gmail.com>
+ * @author Edwin Dankert (edankert@gmail.com)
  * @version $Revision: 1.4 $, $Date: 2008/04/16 19:36:18 $
  */
 public abstract class SyntaxHighlightingView extends FoldingPlainView {

@@ -34,7 +34,7 @@ package org.bounce;
  * for setting the components position, alignments and fill type.
  *
  * @version	$Revision: 1.4 $, $Date: 2008/01/28 21:28:37 $
- * @author Edwin Dankert <edankert@gmail.com>
+ * @author Edwin Dankert (edankert@gmail.com)
  */
 public class FormConstraints {
 	/** LEFT position */

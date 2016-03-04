@@ -45,7 +45,7 @@ import javax.swing.SwingConstants;
  * Horizontal.
  *
  * @version	$Revision: 1.5 $, $Date: 2008/01/28 21:28:37 $
- * @author Edwin Dankert <edankert@gmail.com>
+ * @author Edwin Dankert (edankert@gmail.com)
  */
 public class CenterLayout implements LayoutManager2 {
 	private static final int MINIMUM	= 0;

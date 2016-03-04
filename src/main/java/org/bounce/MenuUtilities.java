@@ -48,7 +48,7 @@ import javax.swing.border.EmptyBorder;
  * Menu Utilities
  *
  * @version $Revision$, $Date$
- * @author Edwin Dankert <edankert@gmail.com>
+ * @author Edwin Dankert (edankert@gmail.com)
  */
 public class MenuUtilities {
 

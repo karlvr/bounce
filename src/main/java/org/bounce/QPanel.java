@@ -44,7 +44,7 @@ import org.bounce.plaf.BouncePanelUI;
  * background, for a very subtle 3D effect.
  *
  * @version	$Revision: 1.7 $, $Date: 2008/01/28 21:28:37 $
- * @author Edwin Dankert <edankert@gmail.com>
+ * @author Edwin Dankert (edankert@gmail.com)
  */
 public class QPanel extends JPanel {
 	private static final long serialVersionUID = 3258413928311566905L;

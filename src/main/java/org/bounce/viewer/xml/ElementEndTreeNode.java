@@ -35,7 +35,7 @@ import org.w3c.dom.Element;
 /**
  * The node for the XML tree, containing an XML element.
  *
- * @author Edwin Dankert <edankert@gmail.com>
+ * @author Edwin Dankert (edankert@gmail.com)
  */
 class ElementEndTreeNode extends NodeTreeNode {
 	private static final long serialVersionUID = 2859132085591886595L;

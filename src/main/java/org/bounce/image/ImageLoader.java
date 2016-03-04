@@ -38,7 +38,7 @@ import javax.swing.ImageIcon;
  * Loads Images from file and stores the images in a list for future reference.
  *
  * @version	$Revision: 1.6 $, $Date: 2008/01/28 21:28:37 $
- * @author Edwin Dankert <edankert@gmail.com>
+ * @author Edwin Dankert (edankert@gmail.com)
  */
 public class ImageLoader {
 	private static final boolean DEBUG = false;

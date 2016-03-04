@@ -51,7 +51,7 @@ import org.bounce.text.FoldingMargin;
  * scroller.setRowHeaderView(margin);
  * </pre>
  * 
- * @author Edwin Dankert <edankert@gmail.com>
+ * @author Edwin Dankert (edankert@gmail.com)
  */
 
 public class XMLFoldingMargin extends FoldingMargin {
@@ -61,6 +61,8 @@ public class XMLFoldingMargin extends FoldingMargin {
 
 	/**
 	 * Convenience constructor for Text Components
+	 * @param editor the text component
+	 * @throws IOException if an IO error occurs
 	 */
 	public XMLFoldingMargin(JTextComponent editor) throws IOException {
 		super(editor);

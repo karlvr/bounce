@@ -37,7 +37,7 @@ import javax.swing.text.Element;
 /**
  * Representation of a Folded area.
  *
- * @author Edwin Dankert <edankert@gmail.com>
+ * @author Edwin Dankert (edankert@gmail.com)
  * @version $Revision: 1.4 $, $Date: 2008/04/16 19:36:18 $
  */
 class Fold {

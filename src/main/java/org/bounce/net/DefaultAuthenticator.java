@@ -58,7 +58,7 @@ import org.bounce.FormLayout;
  * An authenticator which prompts for username and password.
  *
  * @version	$Revision: 1.5 $, $Date: 2008/01/28 21:28:37 $
- * @author Edwin Dankert <edankert@gmail.com>
+ * @author Edwin Dankert (edankert@gmail.com)
  */
 public class DefaultAuthenticator extends Authenticator {
 	// these values can be overriden with other values

@@ -36,7 +36,7 @@ import java.awt.event.MouseAdapter;
  * A MouseListener that informs about double click events.
  *
  * @version	$Revision: 1.4 $, $Date: 2008/01/28 21:28:37 $
- * @author Edwin Dankert <edankert@gmail.com>
+ * @author Edwin Dankert (edankert@gmail.com)
  */
 public abstract class DoubleClickListener extends MouseAdapter {
 	/**
@@ -47,7 +47,7 @@ public abstract class DoubleClickListener extends MouseAdapter {
 	public abstract void doubleClicked( MouseEvent e);
 	
 	/**
-	 * @inheritDoc java.awt.event.MouseAdapter
+	 * {@inheritDoc}
 	 */ 
 	public void mouseClicked( MouseEvent e) {
 		if ( e.getClickCount() == 2) {

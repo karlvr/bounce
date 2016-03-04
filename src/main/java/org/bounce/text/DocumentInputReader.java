@@ -48,7 +48,7 @@ import javax.swing.text.Segment;
  * </p>
  * 
  * @version $Revision: 1.4 $, $Date: 2008/01/28 21:02:14 $
- * @author Edwin Dankert <edankert@gmail.com>
+ * @author Edwin Dankert (edankert@gmail.com)
  */
 public class DocumentInputReader extends Reader {
 
@@ -71,10 +71,7 @@ public class DocumentInputReader extends Reader {
     /**
      * Constructs the new input stream reader out of the Xml input strem.
      * 
-     * @param inputstream the XML input stream.
-     * @throws UnsupportedEncodingException 
-     * 
-     * @throws UnsupportedEncodingException
+     * @param document the document.
      */
     public DocumentInputReader(Document document) {
         stream = new DocumentInputStream(document);

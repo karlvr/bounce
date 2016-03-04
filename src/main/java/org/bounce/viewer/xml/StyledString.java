@@ -36,7 +36,7 @@ import javax.swing.UIManager;
 /**
  * Holds information for a styled string.
  *
- * @author Edwin Dankert <edankert@gmail.com>
+ * @author Edwin Dankert (edankert@gmail.com)
  */
 public class StyledString {
     public static final String CONTROL_COLOR_ID = "org.bounce.viewer.xml.control-color";
