@@ -11,12 +11,16 @@ import java.awt.Component;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.Shape;
+import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JEditorPane;
 import javax.swing.event.DocumentEvent;
@@ -365,6 +369,19 @@ public class FoldingPlainView extends PlainView {
 			throw new IllegalArgumentException("Invalid axis: " + axis);
 		}
 	}
+	
+	/**
+     * Non-Swing components do not get their anti-aliasing rendering hints configured correctly for text. This
+     * method gets the global hints and applies them to the given graphics object.
+     * @param g
+     */
+    public static void configureForTextRendering(Graphics2D g) {
+        @SuppressWarnings("unchecked")
+        final Map<RenderingHints.Key, Object> fontHints = (Map<RenderingHints.Key, Object>) Toolkit.getDefaultToolkit().getDesktopProperty("awt.font.desktophints");
+        for (RenderingHints.Key key : fontHints.keySet()) {
+            g.setRenderingHint(key, fontHints.get(key));
+        }
+    }
 
 	/**
 	 * Renders using the given rendering surface and area on that surface. The
@@ -380,6 +397,8 @@ public class FoldingPlainView extends PlainView {
 	 */
 	public void paint(Graphics g, Shape a) {
 		// long time = System.currentTimeMillis();
+	    
+	    configureForTextRendering((Graphics2D)g);
 
 		Shape originalA = a;
 		// a = adjustPaintRegion(a);
