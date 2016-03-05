@@ -33,8 +33,7 @@
     </license>
   </licenses>
   <scm>
-    <connection>scm:svn:https://bounce.svn.sourceforge.net/svnroot/bounce</connection>
-    <url>http://bounce.cvs.sourceforge.net/bounce/</url>
+    <connection>scm:git:git@github.com:karlvr/bounce.git</connection>
   </scm>
   <organization>
     <name>Edwin Dankert</name>
