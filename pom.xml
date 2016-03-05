@@ -4,7 +4,7 @@
   <groupId>com.edankert</groupId>
   <artifactId>bounce</artifactId>
   <packaging>bundle</packaging>
-  <version>0.20-SNAPSHOT</version>
+  <version>0.21-SNAPSHOT</version>
   <name>Bounce</name>
   <url>http://www.edankert.com/bounce</url>
   <description>A set of Java and Swing extensions, including ... layout managers like a FormLayout and CenterLayout, image filters, a comprehensive messaging mechanism, a XMLEditorKit with syntax highlighting and automatic indentation and more.</description>
@@ -19,7 +19,7 @@
       <name>Edwin Dankert</name>
       <email>edankert@gmail.com</email>
       <url>http://www.edankert.com/</url>
-      <organization/>
+      <organization />
       <roles>
         <role>Java Developer</role>
         <role>Administrator</role>
@@ -34,6 +34,7 @@
   </licenses>
   <scm>
     <connection>scm:git:git@github.com:karlvr/bounce.git</connection>
+    <tag>HEAD</tag>
   </scm>
   <organization>
     <name>Edwin Dankert</name>
@@ -132,7 +133,7 @@
         <artifactId>maven-javadoc-plugin</artifactId>
         <version>2.10.3</version>
         <configuration>
-        	<header>&lt;a href="http://sourceforge.net/projects/bounce">&lt;img src="http://sflogo.sourceforge.net/sflogo.php?group_id=62201&amp;type=12" width="120" height="30" alt="Get Bounce at SourceForge.net. Fast, secure and Free Open Source software downloads" />&lt;/a></header>
+        	<header>&lt;a href="http://sourceforge.net/projects/bounce"&gt;&lt;img src="http://sflogo.sourceforge.net/sflogo.php?group_id=62201&amp;type=12" width="120" height="30" alt="Get Bounce at SourceForge.net. Fast, secure and Free Open Source software downloads" /&gt;&lt;/a&gt;</header>
       	</configuration>
       </plugin>
     </plugins>
